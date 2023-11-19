@@ -19,11 +19,11 @@ export class OptionService {
     return this.optionRepository.update(id, updateOptionInput);
   }
 
-  async removeOption(id: number): Promise<void> {
-    return this.optionRepository.remove(id);
+  async deleteOption(id: number): Promise<void> {
+    return this.optionRepository.delete(id);
   }
 
-  async findOneOption(id: number): Promise<Option | undefined> {
+  async getOption(id: number): Promise<Option | undefined> {
     return this.optionRepository.findOne(id);
   }
 }

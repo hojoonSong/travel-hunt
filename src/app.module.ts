@@ -11,6 +11,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { OptionModule } from './option/option.module';
+import { Option } from './option/entity/option.entity';
+import { Answer } from './answer/entity/answer.entity';
+import { Question } from './question/entity/question.entity';
+import { Response } from './response/entity/response.entity';
+import { Survey } from './survey/entity/survey.entity';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -40,7 +46,7 @@ import { OptionModule } from './option/option.module';
       password: process.env.DATABASE_PASS,
       database: process.env.DATABASE_NAME,
       synchronize: process.env.NODE_ENV !== 'production',
-      entities: [],
+      entities: [Option, Answer, Question, Response, Survey],
       logging: process.env.NODE_ENV !== 'production',
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -51,6 +57,7 @@ import { OptionModule } from './option/option.module';
       context: ({ req }) => ({ req }),
     }),
     OptionModule,
+    QuestionModule,
   ],
 
   controllers: [AppController],

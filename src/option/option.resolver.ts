@@ -29,7 +29,7 @@ export class OptionResolver {
   async removeOption(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
-    await this.optionService.removeOption(id);
+    await this.optionService.deleteOption(id);
     return true;
   }
 
@@ -37,6 +37,6 @@ export class OptionResolver {
   async option(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<Option | undefined> {
-    return this.optionService.findOneOption(id);
+    return this.optionService.getOption(id);
   }
 }

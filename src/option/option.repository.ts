@@ -35,7 +35,7 @@ export class OptionRepository {
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     await this.repository.delete(id);
   }
 }

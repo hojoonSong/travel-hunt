@@ -1,4 +1,4 @@
-import { Field, ID, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { UpdateOptionInput } from 'src/option/types/update-option.input';
 
 @InputType()

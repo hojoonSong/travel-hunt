@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './common/env.validation';
 import { WinstonModule, utilities } from 'nest-winston';
@@ -61,8 +59,5 @@ import { SurveyModule } from './survey/survey.module';
     QuestionModule,
     SurveyModule,
   ],
-
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

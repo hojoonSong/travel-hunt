@@ -29,9 +29,9 @@ export class SurveyRepository {
 
   async update(
     id: number,
-    updatesurveyInput: UpdateSurveyInput,
+    updateSurveyInput: UpdateSurveyInput,
   ): Promise<Survey> {
-    await this.repository.update(id, updatesurveyInput);
+    await this.repository.update(id, updateSurveyInput);
     return this.findOne(id);
   }
 

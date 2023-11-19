@@ -1,6 +1,6 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { GraphqlExceptionFilter } from './common/filter/graphql-exception.filter';
 import {
   ClassSerializerInterceptor,
   Logger,
@@ -34,7 +34,7 @@ async function bootstrap(): Promise<void> {
 
   app
     .useGlobalPipes(new ValidationPipe(validationPipeOptions))
-    .useGlobalFilters(new HttpExceptionFilter(new Logger()))
+    .useGlobalFilters(new GraphqlExceptionFilter(new Logger()))
     .enableCors(corsOptions);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

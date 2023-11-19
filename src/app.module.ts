@@ -7,6 +7,10 @@ import { WinstonModule, utilities } from 'nest-winston';
 import * as winston from 'winston';
 import { ExceptionModule } from './common/filter/exception-filter.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { OptionModule } from './option/option.module';
 
 @Module({
   imports: [
@@ -39,6 +43,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [],
       logging: process.env.NODE_ENV !== 'production',
     }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      playground: true,
+      context: ({ req }) => ({ req }),
+    }),
+    OptionModule,
   ],
 
   controllers: [AppController],

@@ -1,0 +1,70 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Answer {
+  id: ID!
+  question: Question!
+  response: Response!
+  selectedOptionId: Int!
+}
+
+input CreateOptionInput {
+  optionText: String!
+  questionId: ID!
+  score: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createOption(createOptionInput: CreateOptionInput!): Option!
+  removeOption(id: ID!): Boolean!
+  updateOption(id: ID!, updateOptionInput: UpdateOptionInput!): Option!
+}
+
+type Option {
+  id: ID!
+  optionText: String!
+  question: Question!
+  score: Int!
+}
+
+type Query {
+  option(id: ID!): Option
+}
+
+type Question {
+  id: ID!
+  nextQuestionId: Int
+  options: [Option!]!
+  questionText: String!
+  questionType: String!
+  survey: Survey!
+}
+
+type Response {
+  answers: [Answer!]!
+  completionDate: DateTime!
+  id: ID!
+  survey: Survey!
+  userId: Int!
+}
+
+type Survey {
+  creationDate: DateTime!
+  description: String!
+  id: ID!
+  questions: [Question!]!
+  responses: [Response!]!
+  title: String!
+}
+
+input UpdateOptionInput {
+  id: ID!
+  optionText: String
+  score: Int
+}

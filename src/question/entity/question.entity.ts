@@ -20,7 +20,7 @@ export class Question {
   questionText: string;
 
   @Column()
-  questionType: string; // Single Choice, Multiple Choice, etc.
+  questionType: string;
 
   @Column({ nullable: true })
   nextQuestionId: number | null;

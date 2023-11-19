@@ -10,36 +10,40 @@ import { Request, Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private logger: Logger) { }
+  constructor(private logger: Logger) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
+    const url = req ? req.url : 'unknown';
     const stack = exception.stack;
 
-    if (!(exception instanceof HttpException)) {
-      exception = new InternalServerErrorException();
+    let httpException: HttpException;
+
+    if (exception instanceof HttpException) {
+      // 'exception'이 'HttpException' 인스턴스인 경우
+      httpException = exception;
+    } else {
+      // 그렇지 않은 경우, 'InternalServerErrorException'으로 처리
+      httpException = new InternalServerErrorException();
+      this.logger.error('Unhandled exception', exception.stack);
     }
 
-    const statusCode = (exception as HttpException).getStatus();
-    const response = (exception as HttpException).getResponse();
+    const statusCode = httpException.getStatus();
+    const response = httpException.getResponse();
+    const message = response['message'] || 'Internal Server Error';
+
     const formattedResponse = {
       code: statusCode,
-      message: response['message'] || 'Internal Server Error',
+      message: message,
       success: false,
-      data: '',
+      data: null,
     };
 
-    const log = {
-      url: req.url,
-      formattedResponse,
-      stack,
-    };
+    const log = { url, formattedResponse, stack };
     this.logger.error(log);
 
-    res
-      .status((exception as HttpException).getStatus())
-      .json(formattedResponse);
+    res.status(statusCode).json(formattedResponse);
   }
 }

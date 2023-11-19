@@ -1,5 +1,5 @@
 import { Field, ID, InputType, Int } from '@nestjs/graphql';
-import { OptionType } from 'src/option/types/option.type';
+import { CreateOptionInput } from 'src/option/types/create-option.input';
 
 @InputType()
 export class CreateQuestionInput {
@@ -12,8 +12,8 @@ export class CreateQuestionInput {
   @Field()
   questionType: string;
 
-  @Field(() => [OptionType])
-  options: OptionType[];
+  @Field(() => [CreateOptionInput])
+  options: CreateOptionInput[];
 
   @Field({ nullable: true })
   isMandatory?: boolean;

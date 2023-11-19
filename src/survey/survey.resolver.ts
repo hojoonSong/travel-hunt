@@ -3,19 +3,20 @@ import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { Survey } from './entity/survey.entity';
 import { CreateSurveyInput } from './types/create-survey.input';
 import { UpdateSurveyInput } from './types/update.survey.input';
+import { SurveyType } from './types/survey.type';
 
 @Resolver((of) => Survey)
 export class SurveyResolver {
   constructor(private readonly surveyService: SurveyService) {}
 
-  @Mutation((returns) => Survey)
+  @Mutation((returns) => SurveyType)
   async createResolver(
     @Args('createSurveyInput') createSurveyInput: CreateSurveyInput,
   ): Promise<Survey> {
     return this.surveyService.createSurvey(createSurveyInput);
   }
 
-  @Mutation((returns) => Survey)
+  @Mutation((returns) => SurveyType)
   async updateSurvey(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateSurveyInput') updateSurveyInput: UpdateSurveyInput,
@@ -23,7 +24,7 @@ export class SurveyResolver {
     return this.surveyService.updateSurvey(id, updateSurveyInput);
   }
 
-  @Query((returns) => Survey, { nullable: true })
+  @Query((returns) => SurveyType, { nullable: true })
   async survey(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Survey | undefined> {

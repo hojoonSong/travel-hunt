@@ -11,16 +11,4 @@ export class UpdateQuestionInput {
 
   @Field(() => [UpdateOptionInput], { nullable: 'itemsAndList' })
   options?: UpdateOptionInput[];
-
-  @Field({ nullable: true })
-  isMandatory?: boolean;
-
-  @Field(() => Int, { nullable: true })
-  order?: number;
-
-  @Field(() => ID, { nullable: true })
-  conditionFieldId?: number;
-
-  @Field({ nullable: true })
-  conditionValue?: string;
 }

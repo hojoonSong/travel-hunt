@@ -29,7 +29,7 @@ export class QuestionRepository {
 
   async update(
     id: number,
-    updateQuestionInput: UpdateQuestionInput
+    updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
     await this.repository.update(id, updateQuestionInput);
     return this.findOne(id);

@@ -17,6 +17,7 @@ import { Question } from './question/entity/question.entity';
 import { Response } from './response/entity/response.entity';
 import { Survey } from './survey/entity/survey.entity';
 import { QuestionModule } from './question/question.module';
+import { SurveyModule } from './survey/survey.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { QuestionModule } from './question/question.module';
     }),
     OptionModule,
     QuestionModule,
+    SurveyModule,
   ],
 
   controllers: [AppController],

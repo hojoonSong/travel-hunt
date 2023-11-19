@@ -17,8 +17,8 @@ export class Response {
   @ManyToOne(() => Survey, (survey) => survey.responses)
   survey: Survey;
 
-  @Column()
-  userId: number;
+  @Column({ unique: true })
+  email: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   completionDate: Date;

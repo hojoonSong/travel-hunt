@@ -15,6 +15,19 @@ input CreateOptionInput {
   score: Int!
 }
 
+input CreateQuestionInput {
+  options: [CreateOptionInput!]!
+  questionText: String!
+  questionType: String!
+  surveyId: ID!
+}
+
+input CreateSurveyInput {
+  description: String!
+  questions: [CreateQuestionInput!]!
+  title: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -22,8 +35,14 @@ scalar DateTime
 
 type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
+  createQuestion(createQuestionInput: CreateQuestionInput!): Question!
+  createResolver(createSurveyInput: CreateSurveyInput!): Survey!
+  deleteQuestion(id: Int!): Boolean!
+  deleteSurvey(id: Int!): Boolean!
   removeOption(id: ID!): Boolean!
   updateOption(id: ID!, updateOptionInput: UpdateOptionInput!): Option!
+  updateQuestion(id: Int!, updateQuestionInput: UpdateQuestionInput!): Question!
+  updateSurvey(id: Int!, updateSurveyInput: UpdateSurveyInput!): Survey!
 }
 
 type Option {
@@ -35,6 +54,8 @@ type Option {
 
 type Query {
   option(id: ID!): Option
+  question(id: Int!): Question
+  survey(id: Int!): Survey
 }
 
 type Question {
@@ -49,9 +70,9 @@ type Question {
 type Response {
   answers: [Answer!]!
   completionDate: DateTime!
+  email: String!
   id: ID!
   survey: Survey!
-  userId: Int!
 }
 
 type Survey {
@@ -67,4 +88,17 @@ input UpdateOptionInput {
   id: ID!
   optionText: String
   score: Int
+}
+
+input UpdateQuestionInput {
+  options: [UpdateOptionInput]
+  questionId: ID!
+  questionText: String
+}
+
+input UpdateSurveyInput {
+  description: String
+  id: ID!
+  questions: [UpdateQuestionInput]
+  title: String
 }

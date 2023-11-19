@@ -10,8 +10,8 @@ export class ResponseType {
   @Field(() => SurveyType)
   survey: SurveyType;
 
-  @Field(() => Int)
-  userId: number;
+  @Field()
+  email: string;
 
   @Field()
   completionDate: Date;

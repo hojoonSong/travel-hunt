@@ -14,19 +14,4 @@ export class CreateQuestionInput {
 
   @Field(() => [CreateOptionInput])
   options: CreateOptionInput[];
-
-  @Field({ nullable: true })
-  isMandatory?: boolean;
-
-  @Field(() => ID)
-  questionId: number;
-
-  @Field(() => Int, { nullable: true })
-  order?: number;
-
-  @Field(() => ID, { nullable: true })
-  conditionFieldId?: number;
-
-  @Field({ nullable: true })
-  conditionValue?: string;
 }

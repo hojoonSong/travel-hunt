@@ -11,8 +11,6 @@ export class OptionResolver {
   constructor(private readonly optionService: OptionService) {}
 
   @Mutation(() => OptionType)
-  @ApiOperation({ summary: 'Create a new option' })
-  @ApiResponse({ status: 200, description: 'Option created', type: OptionType })
   async createOption(
     @Args('createOptionInput') createOptionInput: CreateOptionInput,
   ) {
@@ -20,8 +18,6 @@ export class OptionResolver {
   }
 
   @Mutation(() => OptionType)
-  @ApiOperation({ summary: 'Update an option' })
-  @ApiResponse({ status: 200, description: 'Option updated', type: OptionType })
   async updateOption(
     @Args('id', { type: () => ID }) id: number,
     @Args('updateOptionInput') updateOptionInput: UpdateOptionInput,
@@ -30,8 +26,6 @@ export class OptionResolver {
   }
 
   @Mutation(() => Boolean)
-  @ApiOperation({ summary: 'Remove an option' })
-  @ApiResponse({ status: 200, description: 'Option removed' })
   async removeOption(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
@@ -40,8 +34,6 @@ export class OptionResolver {
   }
 
   @Query(() => OptionType, { nullable: true })
-  @ApiOperation({ summary: 'Get an option by ID' })
-  @ApiResponse({ status: 200, description: 'Option found', type: OptionType })
   async option(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<Option | undefined> {

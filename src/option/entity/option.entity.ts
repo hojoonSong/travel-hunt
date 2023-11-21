@@ -6,6 +6,9 @@ export class Option {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  questionId: number;
+
   @ManyToOne(() => Question, (question) => question.options)
   question: Question;
 

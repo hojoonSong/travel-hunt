@@ -6,8 +6,8 @@ export class OptionType {
   @Field(() => ID)
   id: number;
 
-  @Field(() => QuestionType)
-  question: QuestionType;
+  @Field(() => Int)
+  questionId: number;
 
   @Field()
   optionText: string;

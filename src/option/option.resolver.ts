@@ -19,14 +19,14 @@ export class OptionResolver {
 
   @Mutation(() => OptionType)
   async updateOption(
-    @Args('id', { type: () => ID }) id: number,
     @Args('updateOptionInput') updateOptionInput: UpdateOptionInput,
   ): Promise<Option> {
-    return this.optionService.updateOption(id, updateOptionInput);
+    const { id, ...updateData } = updateOptionInput;
+    return this.optionService.updateOption(id, updateData);
   }
 
   @Mutation(() => Boolean)
-  async removeOption(
+  async deleteOption(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
     await this.optionService.deleteOption(id);

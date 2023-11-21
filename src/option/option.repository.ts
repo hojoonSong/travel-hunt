@@ -29,10 +29,10 @@ export class OptionRepository {
 
   async update(
     id: number,
-    updateOptionInput: UpdateOptionInput,
+    updateData: Partial<UpdateOptionInput>,
   ): Promise<Option> {
-    await this.repository.update(id, updateOptionInput);
-    return this.findOne(id);
+    await this.repository.update(id, updateData);
+    return this.repository.findOne({ where: { id } });
   }
 
   async delete(id: number): Promise<void> {

@@ -22,7 +22,7 @@ input CreateOptionInput {
 }
 
 input CreateQuestionInput {
-  options: [CreateOptionInput!]!
+  options: [CreateOptionInput!]
   questionText: String!
   questionType: String!
   surveyId: ID
@@ -50,10 +50,10 @@ type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
   createQuestion(createQuestionInput: CreateQuestionInput!): Question!
   createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
+  deleteOption(id: ID!): Boolean!
   deleteQuestion(id: Int!): Boolean!
   deleteSurvey(id: Int!): Boolean!
-  removeOption(id: ID!): Boolean!
-  updateOption(id: ID!, updateOptionInput: UpdateOptionInput!): Option!
+  updateOption(updateOptionInput: UpdateOptionInput!): Option!
   updateQuestion(id: Int!, updateQuestionInput: UpdateQuestionInput!): Question!
   updateSurvey(id: Int!, updateSurveyInput: UpdateSurveyInput!): Survey!
 }
@@ -61,7 +61,7 @@ type Mutation {
 type Option {
   id: ID!
   optionText: String!
-  question: Question!
+  questionId: Int!
   score: Int!
 }
 
@@ -100,6 +100,7 @@ type Survey {
 input UpdateOptionInput {
   id: ID!
   optionText: String
+  questionId: ID
   score: Int
 }
 

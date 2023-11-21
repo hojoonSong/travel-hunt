@@ -5,6 +5,9 @@ export class UpdateOptionInput {
   @Field(() => ID)
   id: number;
 
+  @Field(() => ID, { nullable: true })
+  questionId?: number;
+
   @Field({ nullable: true })
   optionText?: string;
 

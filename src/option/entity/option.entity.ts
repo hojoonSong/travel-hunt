@@ -17,4 +17,7 @@ export class Option {
 
   @Column()
   score: number;
+
+  @Column({ nullable: true })
+  conditionalNextQuestionId: number | null;
 }

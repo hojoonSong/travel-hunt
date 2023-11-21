@@ -1,5 +1,4 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
-import { QuestionType } from '../../question/types/question.type';
 
 @ObjectType('Option')
 export class OptionType {
@@ -14,4 +13,7 @@ export class OptionType {
 
   @Field(() => Int)
   score: number;
+
+  @Field(() => Int, { nullable: true })
+  conditionalNextQuestionId: number | null;
 }

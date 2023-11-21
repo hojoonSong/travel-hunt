@@ -10,4 +10,7 @@ export class CreateOptionInput {
 
   @Field(() => Int)
   score: number;
+
+  @Field(() => Int, { nullable: true })
+  conditionalNextQuestionId?: number | null;
 }

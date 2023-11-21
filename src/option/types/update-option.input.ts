@@ -13,4 +13,7 @@ export class UpdateOptionInput {
 
   @Field(() => Int, { nullable: true })
   score?: number;
+
+  @Field(() => Int, { nullable: true })
+  conditionalNextQuestionId?: number | null;
 }

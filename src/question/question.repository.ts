@@ -16,16 +16,22 @@ export class QuestionRepository {
     return this.repository.save(question);
   }
 
-  async findOne(id: number): Promise<Question | undefined> {
-    return this.repository.findOne({
-      where: { id },
-    });
+  async findOne(
+    id: number,
+    relations?: string[],
+  ): Promise<Question | undefined> {
+    const findOptions = { where: { id } };
+
+    if (relations && relations.length > 0) {
+      findOptions['relations'] = relations;
+    }
+    return this.repository.findOne(findOptions);
   }
 
   async create(createQuestionInput: CreateQuestionInput): Promise<Question> {
     const newQuestion = this.repository.create(createQuestionInput);
     return this.repository.save(newQuestion);
-  }
+  } 
 
   async update(
     id: number,

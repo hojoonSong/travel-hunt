@@ -13,12 +13,6 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 
-  const validationPipeOptions = {
-    whitelist: true,
-    transform: true,
-    forbidNonWhitelisted: true,
-  };
-
   const corsOptions = {
     origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -33,7 +27,6 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
 
   app
-    .useGlobalPipes(new ValidationPipe(validationPipeOptions))
     .useGlobalFilters(new GraphqlExceptionFilter(new Logger()))
     .enableCors(corsOptions);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));

@@ -10,7 +10,7 @@ export class SurveyResolver {
   constructor(private readonly surveyService: SurveyService) {}
 
   @Mutation((returns) => SurveyType)
-  async createResolver(
+  async createSurvey(
     @Args('createSurveyInput') createSurveyInput: CreateSurveyInput,
   ): Promise<Survey> {
     return this.surveyService.createSurvey(createSurveyInput);

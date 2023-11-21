@@ -9,6 +9,12 @@ type Answer {
   selectedOptionId: Int!
 }
 
+input CreateAnswerInput {
+  questionId: Int!
+  responseId: Int!
+  selectedOptionId: Int!
+}
+
 input CreateOptionInput {
   optionText: String!
   questionId: ID!
@@ -19,12 +25,19 @@ input CreateQuestionInput {
   options: [CreateOptionInput!]!
   questionText: String!
   questionType: String!
-  surveyId: ID!
+  surveyId: ID
+}
+
+input CreateResponseInput {
+  answers: [CreateAnswerInput!]!
+  email: String!
+  surveyId: ID
 }
 
 input CreateSurveyInput {
   description: String!
-  questions: [CreateQuestionInput!]!
+  questions: [CreateQuestionInput!]
+  responses: [CreateResponseInput!]
   title: String!
 }
 
@@ -36,7 +49,7 @@ scalar DateTime
 type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
   createQuestion(createQuestionInput: CreateQuestionInput!): Question!
-  createResolver(createSurveyInput: CreateSurveyInput!): Survey!
+  createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
   deleteQuestion(id: Int!): Boolean!
   deleteSurvey(id: Int!): Boolean!
   removeOption(id: ID!): Boolean!

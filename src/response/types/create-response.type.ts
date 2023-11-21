@@ -1,13 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { CreateAnswerInput } from 'src/answer/types/create-answer.input';
 
 @InputType()
 export class CreateResponseInput {
-  @Field()
-  email: string;
+  @Field(() => ID, { nullable: true })
+  surveyId?: number;
 
   @Field()
-  surveyId: number;
+  email: string;
 
   @Field(() => [CreateAnswerInput])
   answers: CreateAnswerInput[];

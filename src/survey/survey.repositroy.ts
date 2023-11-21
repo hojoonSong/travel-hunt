@@ -16,10 +16,13 @@ export class SurveyRepository {
     return this.repository.save(survey);
   }
 
-  async findOne(id: number): Promise<Survey | undefined> {
-    return this.repository.findOne({
-      where: { id },
-    });
+  async findOne(id: number, relations?: string[]): Promise<Survey | undefined> {
+    const findOptions = { where: { id } };
+
+    if (relations && relations.length > 0) {
+      findOptions['relations'] = relations;
+    }
+    return this.repository.findOne(findOptions);
   }
 
   async create(createSurveyInput: CreateSurveyInput): Promise<Survey> {

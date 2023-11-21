@@ -11,7 +11,16 @@ export class QuestionService {
   async createQuestion(
     createQuestionInput: CreateQuestionInput,
   ): Promise<Question> {
-    return this.questionRepository.create(createQuestionInput);
+    const question = await this.questionRepository.create(createQuestionInput);
+    const savedQuestion = await this.questionRepository.save(question);
+
+    if (createQuestionInput.options) {
+      for (const optionInput of createQuestionInput.options) {
+        optionInput.questionId = savedQuestion.id;
+      }
+    }
+
+    return this.questionRepository.findOne(savedQuestion.id, ['options']);
   }
 
   async updateQuestion(

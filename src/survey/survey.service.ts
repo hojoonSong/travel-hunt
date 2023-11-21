@@ -9,7 +9,25 @@ export class SurveyService {
   constructor(private surveyRepository: SurveyRepository) {}
 
   async createSurvey(createSurveyInput: CreateSurveyInput): Promise<Survey> {
-    return this.surveyRepository.create(createSurveyInput);
+    const survey = await this.surveyRepository.create(createSurveyInput);
+    const savedSurvey = await this.surveyRepository.save(survey);
+
+    if (createSurveyInput.questions) {
+      for (const questionInput of createSurveyInput.questions) {
+        questionInput.surveyId = savedSurvey.id;
+      }
+    }
+
+    if (createSurveyInput.responses) {
+      for (const responseInput of createSurveyInput.responses) {
+        responseInput.surveyId = savedSurvey.id;
+      }
+    }
+
+    return this.surveyRepository.findOne(savedSurvey.id, [
+      'questions',
+      'responses',
+    ]);
   }
 
   async getSurvey(id: number): Promise<Survey | undefined> {

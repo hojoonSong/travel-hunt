@@ -3,8 +3,8 @@ import { CreateOptionInput } from 'src/option/types/create-option.input';
 
 @InputType()
 export class CreateQuestionInput {
-  @Field(() => ID)
-  surveyId: number;
+  @Field(() => ID, { nullable: true })
+  surveyId?: number;
 
   @Field()
   questionText: string;
@@ -12,6 +12,6 @@ export class CreateQuestionInput {
   @Field()
   questionType: string;
 
-  @Field(() => [CreateOptionInput])
+  @Field(() => [CreateOptionInput], { nullable: true })
   options: CreateOptionInput[];
 }

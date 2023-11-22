@@ -16,7 +16,7 @@ export class SurveyResolver {
     return this.surveyService.createSurvey(createSurveyInput);
   }
 
-  @Mutation((returns) => Survey)
+  @Mutation((returns) => SurveyType)
   async updateSurvey(
     @Args('updateSurveyInput') updateSurveyInput: UpdateSurveyInput,
   ): Promise<Survey> {

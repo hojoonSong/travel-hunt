@@ -28,6 +28,6 @@ export class Question {
   @Column({ nullable: true })
   nextQuestionId: number | null;
 
-  @OneToMany(() => Option, (option) => option.question)
+  @OneToMany(() => Option, (option) => option.question, { cascade: ['remove'] })
   options: Option[];
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Question } from './entity/question.entity';
 import { CreateQuestionInput } from './types/create-question.input';
 import { UpdateQuestionInput } from './types/update-question.input';
@@ -11,8 +11,7 @@ export class QuestionRepository {
   constructor(
     @InjectRepository(Question)
     private readonly repository: Repository<Question>,
-    private dataSource: DataSource,
-    private readonly optionRepository: OptionRepository,
+    private optionRepository: OptionRepository,
   ) {}
 
   async save(question: Question): Promise<Question> {
@@ -39,7 +38,7 @@ export class QuestionRepository {
   async updateQuestion(
     updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const queryRunner = this.repository.manager.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -121,7 +120,7 @@ export class QuestionRepository {
   }
 
   async delete(id: number): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const queryRunner = this.repository.manager.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -165,7 +164,7 @@ export class QuestionRepository {
   async createQuestionsWithOptions(
     createQuestionInputs: CreateQuestionInput[],
   ): Promise<Question[]> {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const queryRunner = this.repository.manager.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -206,8 +205,10 @@ export class QuestionRepository {
     }
   }
 
-  async rearrangeQuestions(updateInputs: UpdateQuestionInput[]): Promise<Question[]> {
-    const queryRunner = this.dataSource.createQueryRunner();
+  async rearrangeQuestions(
+    updateInputs: UpdateQuestionInput[],
+  ): Promise<Question[]> {
+    const queryRunner = this.repository.manager.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -215,28 +216,47 @@ export class QuestionRepository {
       const updatedQuestions: Question[] = [];
 
       for (const input of updateInputs) {
-        const { id, previousQuestionId, nextQuestionId, ...otherUpdates } = input;
+        const { id, previousQuestionId, nextQuestionId, ...otherUpdates } =
+          input;
 
         // 현재 질문 찾기
-        const questionToUpdate = await queryRunner.manager.findOne(Question, { where: { id } });
+        const questionToUpdate = await queryRunner.manager.findOne(Question, {
+          where: { id },
+        });
         if (!questionToUpdate) {
           throw new Error(`Question not found with ID: ${id}`);
         }
 
         // 새로운 이전 및 다음 질문 찾기
         const [newPreviousQuestion, newNextQuestion] = await Promise.all([
-          previousQuestionId ? queryRunner.manager.findOne(Question, { where: { id: previousQuestionId } }) : null,
-          nextQuestionId ? queryRunner.manager.findOne(Question, { where: { id: nextQuestionId } }) : null,
+          previousQuestionId
+            ? queryRunner.manager.findOne(Question, {
+                where: { id: previousQuestionId },
+              })
+            : null,
+          nextQuestionId
+            ? queryRunner.manager.findOne(Question, {
+                where: { id: nextQuestionId },
+              })
+            : null,
         ]);
 
         // 기존의 이전 및 다음 질문 찾기
-        const [currentPreviousQuestion, currentNextQuestion] = await Promise.all([
-          queryRunner.manager.findOne(Question, { where: { nextQuestionId: id } }),
-          queryRunner.manager.findOne(Question, { where: { previousQuestionId: id } }),
-        ]);
+        const [currentPreviousQuestion, currentNextQuestion] =
+          await Promise.all([
+            queryRunner.manager.findOne(Question, {
+              where: { nextQuestionId: id },
+            }),
+            queryRunner.manager.findOne(Question, {
+              where: { previousQuestionId: id },
+            }),
+          ]);
 
         // 기존 연결 해제
-        if (currentPreviousQuestion && currentPreviousQuestion.id !== previousQuestionId) {
+        if (
+          currentPreviousQuestion &&
+          currentPreviousQuestion.id !== previousQuestionId
+        ) {
           currentPreviousQuestion.nextQuestionId = null;
           await queryRunner.manager.save(currentPreviousQuestion);
         }

@@ -8,5 +8,6 @@ import { Option } from './entity/option.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Option])],
   providers: [OptionResolver, OptionService, OptionRepository],
+  exports: [OptionService, OptionRepository],
 })
 export class OptionModule {}

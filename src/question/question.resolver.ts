@@ -16,7 +16,7 @@ export class QuestionResolver {
     return this.questionService.createQuestion(createQuestionInput);
   }
 
-  @Mutation(() => Question)
+  @Mutation(() => QuestionType)
   async updateQuestion(
     @Args('updateQuestionInput') updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
@@ -38,7 +38,7 @@ export class QuestionResolver {
     return true;
   }
 
-  @Mutation(() => [Question])
+  @Mutation(() => [QuestionType])
   async createBulkQuestions(
     @Args('createQuestionInputs', { type: () => [CreateQuestionInput] })
     createQuestionInputs: CreateQuestionInput[],
@@ -46,7 +46,7 @@ export class QuestionResolver {
     return this.questionService.createBulkQuestions(createQuestionInputs);
   }
 
-  @Mutation(() => [Question])
+  @Mutation(() => [QuestionType])
   async rearrangeQuestions(
     @Args('updateInputs', { type: () => [UpdateQuestionInput] })
     updateInputs: UpdateQuestionInput[],

@@ -1,4 +1,3 @@
-import { QuestionRepository } from './../question/question.repository';
 import { QuestionService } from './../question/question.service';
 import { UpdateSurveyInput } from './types/update.survey.input';
 import { CreateSurveyInput } from './types/create-survey.input';
@@ -9,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class SurveyService {
   constructor(
-    private surveyRepository: SurveyRepository,
+    private readonly surveyRepository: SurveyRepository,
     private questionService: QuestionService,
   ) {}
 
@@ -43,12 +42,10 @@ export class SurveyService {
       await this.surveyRepository.updateSurvey(id, otherUpdateData);
     }
 
-    // 질문 재배열
     if (questions) {
       await this.questionService.rearrangeQuestions(questions);
     }
 
-    // 질문 삭제
     if (deleteQuestionIds) {
       for (const questionId of deleteQuestionIds) {
         await this.questionService.deleteQuestion(questionId);

@@ -1,7 +1,6 @@
-import { QuestionRepository } from './../question/question.repository';
 import { UpdateSurveyInput } from './types/update.survey.input';
 import { CreateSurveyInput } from './types/create-survey.input';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Survey } from './entity/survey.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class SurveyRepository {
   constructor(
     @InjectRepository(Survey)
-    private dataSource: DataSource,
-    private readonly questionRepository: QuestionRepository,
     private readonly repository: Repository<Survey>,
   ) {}
 

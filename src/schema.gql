@@ -24,6 +24,7 @@ input CreateOptionInput {
 
 input CreateQuestionInput {
   options: [CreateOptionInput!]
+  previousQuestionId: ID
   questionText: String!
   questionType: String!
   surveyId: ID
@@ -38,7 +39,6 @@ input CreateResponseInput {
 input CreateSurveyInput {
   description: String!
   questions: [CreateQuestionInput!]
-  responses: [CreateResponseInput!]
   title: String!
 }
 
@@ -48,15 +48,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  createAnswer(createAnswerInput: CreateAnswerInput!): Answer!
+  createBulkQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
   createOption(createOptionInput: CreateOptionInput!): Option!
   createQuestion(createQuestionInput: CreateQuestionInput!): Question!
+  createResolver(createResponseInput: CreateResponseInput!): Response!
   createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
   deleteOption(id: ID!): Boolean!
   deleteQuestion(id: Int!): Boolean!
+  deleteResponse(id: Int!): Boolean!
   deleteSurvey(id: Int!): Boolean!
+  rearrangeQuestions(updateInputs: [UpdateQuestionInput!]!): [Question!]!
+  removeAnswer(id: ID!): Boolean!
+  updateAnswer(id: ID!, updateAnswerInput: UpdateAnswerInput!): Answer!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
-  updateQuestion(id: Int!, updateQuestionInput: UpdateQuestionInput!): Question!
-  updateSurvey(id: Int!, updateSurveyInput: UpdateSurveyInput!): Survey!
+  updateQuestion(updateQuestionInput: UpdateQuestionInput!): Question!
+  updateResponse(id: Int!, updateResponseInput: UpdateResponseInput!): Response!
+  updateSurvey(updateSurveyInput: UpdateSurveyInput!): Survey!
 }
 
 type Option {
@@ -68,8 +76,10 @@ type Option {
 }
 
 type Query {
+  answer(id: ID!): Answer
   option(id: ID!): Option
   question(id: Int!): Question
+  response(id: Int!): Response
   survey(id: Int!): Survey
 }
 
@@ -99,6 +109,12 @@ type Survey {
   title: String!
 }
 
+input UpdateAnswerInput {
+  questionId: Int
+  responseId: Int
+  selectedOptionId: Int
+}
+
 input UpdateOptionInput {
   conditionalNextQuestionId: Int
   id: ID!
@@ -108,12 +124,25 @@ input UpdateOptionInput {
 }
 
 input UpdateQuestionInput {
-  options: [UpdateOptionInput]
-  questionId: ID!
+  deleteOptionIds: [ID]
+  id: ID!
+  isDeleted: Boolean
+  newOptions: [CreateOptionInput]
+  nextQuestionId: ID
+  options: [CreateOptionInput]
+  previousQuestionId: ID
   questionText: String
+  questionType: String
+  surveyId: ID
+}
+
+input UpdateResponseInput {
+  answers: [UpdateAnswerInput!]
+  email: String
 }
 
 input UpdateSurveyInput {
+  deleteQuestionIds: [ID]
   description: String
   id: ID!
   questions: [UpdateQuestionInput]

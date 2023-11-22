@@ -5,7 +5,7 @@ import { CreateQuestionInput } from './types/create-question.input';
 import { UpdateQuestionInput } from './types/update-question.input';
 import { QuestionType } from './types/question.type';
 
-@Resolver((of) => Question)
+@Resolver(() => Question)
 export class QuestionResolver {
   constructor(private readonly questionService: QuestionService) {}
 
@@ -16,12 +16,11 @@ export class QuestionResolver {
     return this.questionService.createQuestion(createQuestionInput);
   }
 
-  @Mutation((returns) => QuestionType)
+  @Mutation(() => Question)
   async updateQuestion(
-    @Args('id', { type: () => Int }) id: number,
     @Args('updateQuestionInput') updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
-    return this.questionService.updateQuestion(id, updateQuestionInput);
+    return this.questionService.updateQuestion(updateQuestionInput);
   }
 
   @Query((returns) => QuestionType, { nullable: true })
@@ -37,5 +36,21 @@ export class QuestionResolver {
   ): Promise<boolean> {
     await this.questionService.deleteQuestion(id);
     return true;
+  }
+
+  @Mutation(() => [Question])
+  async createBulkQuestions(
+    @Args('createQuestionInputs', { type: () => [CreateQuestionInput] })
+    createQuestionInputs: CreateQuestionInput[],
+  ): Promise<Question[]> {
+    return this.questionService.createBulkQuestions(createQuestionInputs);
+  }
+
+  @Mutation(() => [Question])
+  async rearrangeQuestions(
+    @Args('updateInputs', { type: () => [UpdateQuestionInput] })
+    updateInputs: UpdateQuestionInput[],
+  ): Promise<Question[]> {
+    return this.questionService.rearrangeQuestions(updateInputs);
   }
 }

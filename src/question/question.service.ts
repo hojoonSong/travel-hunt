@@ -24,17 +24,29 @@ export class QuestionService {
   }
 
   async updateQuestion(
-    id: number,
     updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
-    return this.questionRepository.update(id, updateQuestionInput);
+    return this.questionRepository.updateQuestion(updateQuestionInput);
   }
-
   async getQuestion(id: number): Promise<Question | undefined> {
     return this.questionRepository.findOne(id);
   }
 
   async deleteQuestion(id: number): Promise<void> {
     return this.questionRepository.delete(id);
+  }
+
+  async createBulkQuestions(
+    createQuestionInputs: CreateQuestionInput[],
+  ): Promise<Question[]> {
+    return this.questionRepository.createQuestionsWithOptions(
+      createQuestionInputs,
+    );
+  }
+
+  async rearrangeQuestions(
+    updateInputs: UpdateQuestionInput[],
+  ): Promise<Question[]> {
+    return this.questionRepository.rearrangeQuestions(updateInputs);
   }
 }

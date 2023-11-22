@@ -5,7 +5,7 @@ import { CreateSurveyInput } from './types/create-survey.input';
 import { UpdateSurveyInput } from './types/update.survey.input';
 import { SurveyType } from './types/survey.type';
 
-@Resolver((of) => Survey)
+@Resolver(() => Survey)
 export class SurveyResolver {
   constructor(private readonly surveyService: SurveyService) {}
 
@@ -16,12 +16,11 @@ export class SurveyResolver {
     return this.surveyService.createSurvey(createSurveyInput);
   }
 
-  @Mutation((returns) => SurveyType)
+  @Mutation((returns) => Survey)
   async updateSurvey(
-    @Args('id', { type: () => Int }) id: number,
     @Args('updateSurveyInput') updateSurveyInput: UpdateSurveyInput,
   ): Promise<Survey> {
-    return this.surveyService.updateSurvey(id, updateSurveyInput);
+    return this.surveyService.updateSurvey(updateSurveyInput);
   }
 
   @Query((returns) => SurveyType, { nullable: true })

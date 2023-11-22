@@ -23,6 +23,9 @@ export class Question {
   questionType: string;
 
   @Column({ nullable: true })
+  previousQuestionId: number | null;
+
+  @Column({ nullable: true })
   nextQuestionId: number | null;
 
   @OneToMany(() => Option, (option) => option.question)

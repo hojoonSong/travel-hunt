@@ -1,3 +1,5 @@
+import { QuestionRepository } from './../question/question.repository';
+import { QuestionService } from './../question/question.service';
 import { UpdateSurveyInput } from './types/update.survey.input';
 import { CreateSurveyInput } from './types/create-survey.input';
 import { Survey } from './entity/survey.entity';
@@ -6,39 +8,54 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SurveyService {
-  constructor(private surveyRepository: SurveyRepository) {}
+  constructor(
+    private surveyRepository: SurveyRepository,
+    private questionService: QuestionService,
+  ) {}
 
   async createSurvey(createSurveyInput: CreateSurveyInput): Promise<Survey> {
     const survey = await this.surveyRepository.create(createSurveyInput);
     const savedSurvey = await this.surveyRepository.save(survey);
 
-    if (createSurveyInput.questions) {
-      for (const questionInput of createSurveyInput.questions) {
-        questionInput.surveyId = savedSurvey.id;
-      }
+    if (createSurveyInput.questions && createSurveyInput.questions.length > 0) {
+      const questionsWithSurveyId = createSurveyInput.questions.map(
+        (question) => ({
+          ...question,
+          surveyId: savedSurvey.id,
+        }),
+      );
+
+      await this.questionService.createBulkQuestions(questionsWithSurveyId);
     }
 
-    if (createSurveyInput.responses) {
-      for (const responseInput of createSurveyInput.responses) {
-        responseInput.surveyId = savedSurvey.id;
-      }
-    }
-
-    return this.surveyRepository.findOne(savedSurvey.id, [
-      'questions',
-      'responses',
-    ]);
+    return this.surveyRepository.findOne(savedSurvey.id, ['questions']);
   }
 
   async getSurvey(id: number): Promise<Survey | undefined> {
     return this.surveyRepository.findOne(id);
   }
 
-  async updateSurvey(
-    id: number,
-    updateSurveyInput: UpdateSurveyInput,
-  ): Promise<Survey> {
-    return this.surveyRepository.update(id, updateSurveyInput);
+  async updateSurvey(updateSurveyInput: UpdateSurveyInput): Promise<Survey> {
+    const { id, questions, deleteQuestionIds, ...otherUpdateData } =
+      updateSurveyInput;
+
+    if (Object.keys(otherUpdateData).length > 0) {
+      await this.surveyRepository.updateSurvey(id, otherUpdateData);
+    }
+
+    // 질문 재배열
+    if (questions) {
+      await this.questionService.rearrangeQuestions(questions);
+    }
+
+    // 질문 삭제
+    if (deleteQuestionIds) {
+      for (const questionId of deleteQuestionIds) {
+        await this.questionService.deleteQuestion(questionId);
+      }
+    }
+
+    return this.surveyRepository.findOne(id);
   }
 
   async deleteSurvey(id: number): Promise<void> {

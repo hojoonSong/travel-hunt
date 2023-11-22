@@ -1,5 +1,11 @@
 import { Question } from 'src/question/entity/question.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Option {
@@ -18,6 +24,7 @@ export class Option {
   @Column()
   score: number;
 
-  @Column({ nullable: true })
-  conditionalNextQuestionId: number | null;
+  @ManyToOne(() => Question, (question) => question.options)
+  @JoinColumn({ name: 'conditionalNextQuestionId' })
+  conditionalNextQuestion: Question | null;
 }

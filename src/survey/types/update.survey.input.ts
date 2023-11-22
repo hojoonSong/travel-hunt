@@ -14,4 +14,7 @@ export class UpdateSurveyInput {
 
   @Field(() => [UpdateQuestionInput], { nullable: 'itemsAndList' })
   questions?: UpdateQuestionInput[];
+
+  @Field(() => [ID], { nullable: 'itemsAndList' })
+  deleteQuestionIds?: number[];
 }

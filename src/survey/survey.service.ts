@@ -27,7 +27,10 @@ export class SurveyService {
       await this.questionService.createBulkQuestions(questionsWithSurveyId);
     }
 
-    return this.surveyRepository.findOne(savedSurvey.id, ['questions']);
+    return this.surveyRepository.findOne(savedSurvey.id, [
+      'questions',
+      'questions.options',
+    ]);
   }
 
   async getSurvey(id: number): Promise<Survey | undefined> {

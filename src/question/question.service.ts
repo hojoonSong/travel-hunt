@@ -20,8 +20,7 @@ export class QuestionService {
 
     if (createQuestionInput.options && createQuestionInput.options.length > 0) {
       for (const optionInput of createQuestionInput.options) {
-        optionInput.questionId = savedQuestion.id;
-        await this.optionService.createOption(optionInput);
+        await this.optionService.createOption(optionInput, savedQuestion.id);
       }
     }
     return this.questionRepository.findOne(savedQuestion.id, ['options']);
@@ -36,11 +35,12 @@ export class QuestionService {
     // 옵션 추가
     if (updateQuestionInput.newOptions) {
       for (const optionInput of updateQuestionInput.newOptions) {
-        optionInput.questionId = updateQuestionInput.id;
-        await this.optionService.createOption(optionInput);
+        await this.optionService.createOption(
+          optionInput,
+          updateQuestionInput.id,
+        );
       }
     }
-
     // 옵션 삭제
     if (updateQuestionInput.deleteOptionIds) {
       for (const optionId of updateQuestionInput.deleteOptionIds) {

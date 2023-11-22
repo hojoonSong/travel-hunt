@@ -22,7 +22,7 @@ export class Survey {
   @CreateDateColumn({ type: 'timestamp' })
   creationDate: Date;
 
-  @OneToMany(() => Question, (question) => question.survey, {
+  @OneToMany(() => Question, (question) => question.surveyId, {
     cascade: ['remove'],
   })
   questions: Question[];

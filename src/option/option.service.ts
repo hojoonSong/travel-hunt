@@ -8,8 +8,11 @@ import { Option } from './entity/option.entity';
 export class OptionService {
   constructor(private readonly optionRepository: OptionRepository) {}
 
-  async createOption(createOptionInput: CreateOptionInput): Promise<Option> {
-    return this.optionRepository.create(createOptionInput);
+  async createOption(
+    createOptionInput: CreateOptionInput,
+    questionId: number,
+  ): Promise<Option> {
+    return this.optionRepository.create(createOptionInput, questionId);
   }
 
   async updateOption(

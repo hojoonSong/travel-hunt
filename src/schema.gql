@@ -18,11 +18,11 @@ input CreateAnswerInput {
 input CreateOptionInput {
   conditionalNextQuestionId: Int
   optionText: String!
-  questionId: ID!
   score: Int!
 }
 
 input CreateQuestionInput {
+  nextQuestionId: ID
   options: [CreateOptionInput!]
   previousQuestionId: ID
   questionText: String!
@@ -50,7 +50,7 @@ scalar DateTime
 type Mutation {
   createAnswer(createAnswerInput: CreateAnswerInput!): Answer!
   createBulkQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
-  createOption(createOptionInput: CreateOptionInput!): Option!
+  createOption(createOptionInput: CreateOptionInput!, questionId: ID!): Option!
   createQuestion(createQuestionInput: CreateQuestionInput!): Question!
   createResolver(createResponseInput: CreateResponseInput!): Response!
   createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
@@ -89,7 +89,7 @@ type Question {
   options: [Option!]!
   questionText: String!
   questionType: String!
-  survey: Survey!
+  surveyId: ID!
 }
 
 type Response {

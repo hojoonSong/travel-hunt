@@ -5,6 +5,7 @@ import { Question } from './entity/question.entity';
 import { CreateQuestionInput } from './types/create-question.input';
 import { UpdateQuestionInput } from './types/update-question.input';
 import { OptionRepository } from 'src/option/option.repository';
+import { CreateOptionInput } from 'src/option/types/create-option.input';
 
 @Injectable()
 export class QuestionRepository {
@@ -164,44 +165,87 @@ export class QuestionRepository {
   async createQuestionsWithOptions(
     createQuestionInputs: CreateQuestionInput[],
   ): Promise<Question[]> {
-    const queryRunner = this.repository.manager.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+    const mainQueryRunner =
+      this.repository.manager.connection.createQueryRunner();
+    await mainQueryRunner.connect();
+    await mainQueryRunner.startTransaction();
 
     try {
       let previousQuestionId: number | null = null;
-      const createdQuestionIds: number[] = [];
+      const createdQuestions: {
+        id: number;
+        options: CreateOptionInput[];
+        surveyId: number;
+      }[] = [];
 
-      for (const questionInput of createQuestionInputs) {
-        questionInput.previousQuestionId = previousQuestionId;
+      for (let i = 0; i < createQuestionInputs.length; i++) {
+        const questionInput = createQuestionInputs[i];
 
-        const newQuestion = this.repository.create(questionInput);
-        const savedQuestion = await queryRunner.manager.save(newQuestion);
+        // 새 질문 생성
+        const newQuestion = this.repository.create({
+          ...questionInput,
+          previousQuestionId: previousQuestionId,
+        });
+        const savedQuestion = await mainQueryRunner.manager.save(newQuestion);
 
-        if (questionInput.options && questionInput.options.length > 0) {
-          for (const optionInput of questionInput.options) {
-            optionInput.questionId = savedQuestion.id;
-            const newOption = this.optionRepository.create(optionInput);
-            await queryRunner.manager.save(newOption);
-          }
+        // 이전 질문의 nextQuestionId 업데이트
+        if (previousQuestionId !== null) {
+          await mainQueryRunner.manager.update(Question, previousQuestionId, {
+            nextQuestionId: savedQuestion.id,
+          });
         }
 
+        // 다음 질문을 위해 현재 질문의 ID 저장
         previousQuestionId = savedQuestion.id;
-        createdQuestionIds.push(savedQuestion.id); // 저장된 질문의 ID를 추적
+
+        // 생성된 질문 정보 저장
+        createdQuestions.push({
+          id: savedQuestion.id,
+          options: questionInput.options,
+          surveyId: questionInput.surveyId,
+        });
       }
 
-      await queryRunner.commitTransaction();
+      // 마지막 질문의 nextQuestionId를 null로 설정
+      if (previousQuestionId !== null) {
+        await mainQueryRunner.manager.update(Question, previousQuestionId, {
+          nextQuestionId: null,
+        });
+      }
 
-      // 저장된 질문 ID를 기반으로 완료된 질문 목록 검색
+      await mainQueryRunner.commitTransaction();
+
+      // 옵션 트랜잭션 처리
+      for (const { id: questionId, options } of createdQuestions) {
+        if (options && options.length > 0) {
+          const optionQueryRunner =
+            this.repository.manager.connection.createQueryRunner();
+          await optionQueryRunner.connect();
+          await optionQueryRunner.startTransaction();
+          try {
+            for (const optionInput of options) {
+              await this.optionRepository.create(optionInput, questionId);
+            }
+            await optionQueryRunner.commitTransaction();
+          } catch (err) {
+            await optionQueryRunner.rollbackTransaction();
+            throw err;
+          } finally {
+            await optionQueryRunner.release();
+          }
+        }
+      }
+
+      // 최종 결과 반환
       return await this.repository.find({
-        where: { id: In(createdQuestionIds) },
+        where: { id: In(createdQuestions.map((q) => q.id)) },
         relations: ['options'],
       });
     } catch (err) {
-      await queryRunner.rollbackTransaction();
+      await mainQueryRunner.rollbackTransaction();
       throw err;
     } finally {
-      await queryRunner.release();
+      await mainQueryRunner.release();
     }
   }
 

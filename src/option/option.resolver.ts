@@ -1,5 +1,4 @@
 import { Args, ID, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OptionType } from './types/option.type';
 import { OptionService } from './option.service';
 import { CreateOptionInput } from './types/create-option.input';
@@ -12,9 +11,10 @@ export class OptionResolver {
 
   @Mutation(() => OptionType)
   async createOption(
+    @Args('questionId', { type: () => ID }) questionId: number,
     @Args('createOptionInput') createOptionInput: CreateOptionInput,
   ) {
-    return this.optionService.createOption(createOptionInput);
+    return this.optionService.createOption(createOptionInput, questionId);
   }
 
   @Mutation(() => OptionType)

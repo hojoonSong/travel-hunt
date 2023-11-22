@@ -22,8 +22,16 @@ export class OptionRepository {
     });
   }
 
-  async create(createOptionInput: CreateOptionInput): Promise<Option> {
-    const newOption = this.repository.create(createOptionInput);
+  async create(
+    createOptionInput: CreateOptionInput,
+    questionId: number,
+  ): Promise<Option> {
+    const optionData = {
+      ...createOptionInput,
+      questionId,
+    };
+
+    const newOption = this.repository.create(optionData);
     return this.repository.save(newOption);
   }
 

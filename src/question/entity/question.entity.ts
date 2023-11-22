@@ -6,6 +6,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -14,7 +15,8 @@ export class Question {
   id: number;
 
   @ManyToOne(() => Survey, (survey) => survey.questions)
-  survey: Survey;
+  @JoinColumn({ name: 'surveyId' })
+  surveyId: number;
 
   @Column()
   questionText: string;

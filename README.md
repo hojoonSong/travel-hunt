@@ -14,8 +14,7 @@
 - ![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
 
 ## 🗺️ ERD
-
-![ERD Diagram](erd.png)
+![ERD Diagram](https://github.com/hojoonSong/travel-hunt/assets/51044545/e422ceac-9280-4491-b902-a7421b1d5c03)
 
 ## 🛠️ 데이터 모델 설계
 
@@ -70,5 +69,135 @@ project-root
 ├── 기타 설정 및 메타데이터 파일들
 ```
 
-## 🏁 마무리와 배운 점
+## 🏁 GraphQL, 쿼리문 생성하기 예제
+
+```js
+# 한 번에 Survey를 생성할때, Question과 Option도 동시에 생성할 수 있습니다.
+mutation CreateNewSurvey {
+  createSurvey(createSurveyInput: {
+    title: "해외 여행 설문조사",
+    description: "다가오는 휴가에 대한 해외 여행 계획에 관한 설문조사입니다.",
+    questions: [
+      {
+        questionText: "당신은 다가올 휴가 때 해외 여행을 희망하시나요?",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "예", score: 1 },
+          { optionText: "아니오", score: 0, conditionalNextQuestionId: 7 }
+        ]
+      },
+      {
+        questionText: "당신이 희망하는 해외여행의 종류는?",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "패키지 여행", score: 1 },
+          { optionText: "자유여행", score: 2 },
+          { optionText: "테마여행", score: 3 }
+        ]
+      },
+      {
+        questionText: "당신이 희망하는 여행지는?",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "동남아/대만/서남아", score: 1 },
+          { optionText: "중국/홍콩/극동러시아", score: 2 },
+          { optionText: "일본", score: 3 },
+          { optionText: "남태평양", score: 4 },
+          { optionText: "유럽/아프리카", score: 5 },
+          { optionText: "미주/중남미/하와이", score: 6 }
+        ]
+      },
+      {
+        questionText: "당신이 생각하는 여행의 1인당 금액은? (쇼핑비용 제외)",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "100만원 미만", score: 1 },
+          { optionText: "100만원 이상 ~ 200만원 미만", score: 2 },
+          { optionText: "200만원 이상 ~ 300만원 미만", score: 3 },
+          { optionText: "300만원 이상 ~ 400만원 미만", score: 4 },
+          { optionText: "400만원 이상", score: 5 }
+        ]
+      },
+      {
+        questionText: "당신이 해외 여행지를 선택할 때 고려하는 사항은? (중복 응답 가능)",
+        questionType: "MultipleChoice",
+        options: [
+          { optionText: "기간", score: 1 },
+          { optionText: "비용", score: 2 },
+          { optionText: "치안", score: 3 },
+          { optionText: "여행목적", score: 4 },
+          { optionText: "음식", score: 5 },
+          { optionText: "쇼핑", score: 6 }
+        ]
+      },
+      {
+        questionText: "당신은 국내여행 보다 해외여행을 선호하시나요?",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "매우 좋음", score: 5 },
+          { optionText: "좋음", score: 4 },
+          { optionText: "보통", score: 3 },
+          { optionText: "나쁨", score: 2 },
+          { optionText: "매우 나쁨", score: 1 }
+        ]
+      },
+      {
+        questionText: "당신의 성별은?",
+        questionType: "SingleChoice",
+        options: [
+          { optionText: "남", score: 1 },
+          { optionText: "여", score: 1 }
+        ]
+      }
+    ]
+  }) {
+    title
+    description
+    questions {
+      id
+      nextQuestionId
+      questionType
+      questionText
+      options {
+        id
+        questionId
+        optionText
+        score
+        conditionalNextQuestionId
+      }
+    }
+  }
+}
+```
+
+```js
+# Response를 생성할 때 email을 기준으로 Unique로 관리됩니다. Answer를 같이 생성할 수 있으며, 설문지가 생성되거나 Read될 때, TotalScore는 다시 재반영됩니다.
+mutation {
+  createResponse(createResponseInput: {
+    surveyId: 1,
+    email: "user@example.kr",
+    answers: [
+      { questionId: 1, selectedOptionId: 1 },
+      { questionId: 2, selectedOptionId: 3 },
+      { questionId: 3, selectedOptionId: 6 },
+      { questionId: 4, selectedOptionId: 13 },
+      { questionId: 5, selectedOptionId: 17 },
+      { questionId: 5, selectedOptionId: 18 },
+      { questionId: 6, selectedOptionId: 21 },
+      { questionId: 7, selectedOptionId: 22 }
+    ]
+  }) {
+    id
+    surveyId
+    email
+    totalScore
+    completionDate
+    answers {
+      id
+      questionId
+      selectedOptionId
+    }
+  }
+}
+```
 

@@ -1,3 +1,5 @@
+import { ResponseRepository } from './../response/response.repository';
+import { QuestionRepository } from './../question/question.repository';
 import { UpdateSurveyInput } from './types/update.survey.input';
 import { CreateSurveyInput } from './types/create-survey.input';
 import { Repository } from 'typeorm';
@@ -10,6 +12,8 @@ export class SurveyRepository {
   constructor(
     @InjectRepository(Survey)
     private readonly repository: Repository<Survey>,
+    private questionRepository: QuestionRepository,
+    private responseRepository: ResponseRepository,
   ) {}
 
   async save(survey: Survey): Promise<Survey> {
@@ -39,6 +43,27 @@ export class SurveyRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await this.repository.delete(id);
+    const survey = await this.repository.findOne({
+      where: { id },
+      relations: ['questions', 'responses'],
+    });
+
+    if (!survey) {
+      throw new Error('Survey not found');
+    }
+
+    if (survey.questions) {
+      for (const question of survey.questions) {
+        await this.questionRepository.delete(question.id);
+      }
+    }
+
+    if (survey.responses) {
+      for (const response of survey.responses) {
+        await this.responseRepository.delete(response.id);
+      }
+    }
+
+    await this.repository.remove(survey);
   }
 }

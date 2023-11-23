@@ -20,31 +20,47 @@ export class ResponseService {
     createResponseInput: CreateResponseInput,
   ): Promise<Response> {
     let totalScore = 0;
-    const newResponse =
-      await this.responseRepository.create(createResponseInput);
 
-    for (const answerInput of createResponseInput.answers) {
-      const answer = new Answer();
-      answer.questionId = answerInput.questionId;
-      answer.selectedOptionId = answerInput.selectedOptionId;
-      answer.response = newResponse;
+    const newResponse = await this.responseRepository.create({
+      ...createResponseInput,
+      answers: undefined,
+    });
 
-      const option = await this.optionRepository.findOne(
-        answer.selectedOptionId,
-      );
-      totalScore += option.score;
-      await this.answerRepository.save(answer);
+    try {
+      await this.responseRepository.save(newResponse);
+
+      for (const answerInput of createResponseInput.answers) {
+        const answer = new Answer();
+        answer.questionId = answerInput.questionId;
+        answer.selectedOptionId = answerInput.selectedOptionId;
+        answer.response = newResponse;
+
+        const option = await this.optionRepository.findOne(
+          answer.selectedOptionId,
+        );
+        totalScore += option.score;
+
+        await this.answerRepository.save(answer);
+      }
+
+      newResponse.totalScore = totalScore;
+      await this.responseRepository.save(newResponse);
+
+      return this.responseRepository.findOne(newResponse.id, ['answers']);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new Error(
+          'Duplicate email detected. Please use a different email.',
+        );
+      } else {
+        throw error;
+      }
     }
-
-    newResponse.totalScore = totalScore;
-    const createdResponse = await this.responseRepository.save(newResponse);
-    return this.responseRepository.findOne(createdResponse.id, ['answers']);
   }
 
   async findResponseWithTotalScore(responseId: number): Promise<ResponseType> {
     const response = await this.responseRepository.findOne(responseId, [
       'answers',
-      'answers.option',
     ]);
     if (!response) {
       throw new Error('Response not found');
@@ -62,6 +78,7 @@ export class ResponseService {
     responseType.answers = response.answers.map((answer) => {
       const answerType = new AnswerType();
       answerType.id = answer.id;
+      answerType.responseId = answer.responseId;
       answerType.questionId = answer.questionId;
       answerType.selectedOptionId = answer.selectedOptionId;
       return answerType;

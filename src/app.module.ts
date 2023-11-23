@@ -49,6 +49,9 @@ import { AnswerModule } from './answer/answer.module';
       synchronize: true,
       entities: [Option, Answer, Question, Response, Survey],
       logging: process.env.NODE_ENV !== 'production',
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

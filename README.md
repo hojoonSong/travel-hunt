@@ -171,7 +171,7 @@ mutation CreateNewSurvey {
 ```
 
 ```js
-# Response를 생성할 때 Answer를 생성하며, 설문지가 생성되거나 Read될 때, TotalScore가 다시 재반영됩니다.
+# Response를 생성할 때 email을 기준으로 Unique로 관리됩니다. Answer를 같이 생성할 수 있으며, 설문지가 생성되거나 Read될 때, TotalScore는 다시 재반영됩니다.
 mutation {
   createResponse(createResponseInput: {
     surveyId: 1,

@@ -11,7 +11,7 @@ type Answer {
 
 input CreateAnswerInput {
   questionId: Int!
-  responseId: Int!
+  responseId: Int
   selectedOptionId: Int!
 }
 

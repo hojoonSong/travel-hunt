@@ -37,7 +37,8 @@ export class ResponseService {
     }
 
     newResponse.totalScore = totalScore;
-    return this.responseRepository.save(newResponse);
+    const createdResponse = await this.responseRepository.save(newResponse);
+    return this.responseRepository.findOne(createdResponse.id, ['answers']);
   }
 
   async findResponseWithTotalScore(responseId: number): Promise<ResponseType> {

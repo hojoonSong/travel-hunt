@@ -16,7 +16,7 @@ export class Response {
   id: number;
 
   @ManyToOne(() => Survey, (survey) => survey.responses)
-  @JoinColumn({ name: 'survey' })
+  @JoinColumn({ name: 'surveyId' })
   survey: Survey;
 
   @Column()
@@ -31,7 +31,7 @@ export class Response {
   @CreateDateColumn({ type: 'timestamp' })
   completionDate: Date;
 
-  @OneToMany(() => Answer, (answer) => answer.responseId, {
+  @OneToMany(() => Answer, (answer) => answer.response, {
     cascade: ['remove'],
   })
   answers: Answer[];

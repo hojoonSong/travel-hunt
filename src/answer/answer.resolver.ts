@@ -33,7 +33,7 @@ export class AnswerResolver {
   }
 
   @Mutation(() => Boolean)
-  async removeAnswer(
+  async deleteAnswer(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
     try {

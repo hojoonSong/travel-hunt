@@ -1,3 +1,4 @@
+import { AnswerRepository } from './../answer/answer.repository';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +11,7 @@ export class ResponseRepository {
   constructor(
     @InjectRepository(Response)
     private readonly repository: Repository<Response>,
+    private answerRepository: AnswerRepository,
   ) {}
 
   async save(response: Response): Promise<Response> {
@@ -42,6 +44,21 @@ export class ResponseRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await this.repository.delete(id);
+    const response = await this.repository.findOne({
+      where: { id },
+      relations: ['answers'],
+    });
+
+    if (!response) {
+      throw new Error('Response not found');
+    }
+
+    if (response.answers) {
+      for (const answer of response.answers) {
+        await this.answerRepository.delete(answer.id);
+      }
+    }
+
+    await this.repository.remove(response);
   }
 }

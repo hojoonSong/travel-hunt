@@ -39,7 +39,7 @@ export class Question {
   })
   options: Option[];
 
-  @OneToMany(() => Answer, (option) => option.question, {
+  @OneToMany(() => Answer, (answer) => answer.question, {
     cascade: ['remove'],
   })
   answers: Answer[];

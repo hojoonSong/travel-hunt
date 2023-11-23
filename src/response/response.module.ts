@@ -10,5 +10,6 @@ import { OptionModule } from 'src/option/option.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Response]), AnswerModule, OptionModule],
   providers: [ResponseService, ResponseResolver, ResponseRepository],
+  exports: [ResponseRepository],
 })
 export class ResponseModule {}

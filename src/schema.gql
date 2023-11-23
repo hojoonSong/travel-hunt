@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Answer {
-  SurveyId: ID!
   id: ID!
   questionId: ID!
+  responseId: ID!
   selectedOptionId: Int!
 }
 
@@ -53,12 +53,12 @@ type Mutation {
   createQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
   createResponse(createResponseInput: CreateResponseInput!): Response!
   createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
+  deleteAnswer(id: ID!): Boolean!
   deleteOption(id: ID!): Boolean!
   deleteQuestion(id: Int!): Boolean!
   deleteResponse(id: Int!): Boolean!
   deleteSurvey(id: Int!): Boolean!
   rearrangeQuestions(updateInputs: [UpdateQuestionInput!]!): [Question!]!
-  removeAnswer(id: ID!): Boolean!
   updateAnswer(id: ID!, updateAnswerInput: UpdateAnswerInput!): Answer!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
   updateQuestion(updateQuestionInput: UpdateQuestionInput!): Question!

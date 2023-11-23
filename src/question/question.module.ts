@@ -9,6 +9,6 @@ import { OptionModule } from 'src/option/option.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Question]), OptionModule],
   providers: [QuestionResolver, QuestionService, QuestionRepository],
-  exports: [QuestionService],
+  exports: [QuestionService, QuestionRepository],
 })
 export class QuestionModule {}

@@ -52,7 +52,7 @@ import { AnswerModule } from './answer/answer.module';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: '/src/schema.gql',
+      autoSchemaFile: 'src/schema.gql',
       sortSchema: true,
       playground: true,
       context: ({ req }) => ({ req }),

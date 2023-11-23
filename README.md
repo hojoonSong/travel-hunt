@@ -1,111 +1,74 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🚀 Travel Hunt 개발 과정 🚀
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📘 API Documentation
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- 👉 [GraphQL PlayGround](https://travel-hunt.onrender.com/graphql/)
 
-## 커밋 템플릿 적용 방법
+- 🚀 배포 주의사항 (클릭 후 대기 시간이 있습니다.)
 
-```bash
-# 로컬 환경에서 커밋 템플릿 적용
-git config --local commit.template .gitmessage.txt
+## 📚 기술 스택
 
-# 커밋 템플릿으로 커밋
-git commit
+- ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+- ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+- ![TypeORM](https://img.shields.io/badge/TypeORM-fe0902?style=for-the-badge&logo=databricks&logoColor=white)
+- ![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+
+## 🗺️ ERD
+
+![ERD Diagram](erd.png)
+
+## 🛠️ 데이터 모델 설계
+
+### 1️⃣ `Answer` 엔터티
+
+- 응답(`Response`)과 질문(`Question`)에 대한 참조를 포함합니다.
+- 각 답변은 선택된 옵션의 ID를 가집니다.
+
+### 2️⃣ `Option` 엔터티
+
+- 각 옵션은 특정 질문(`Question`)에 속합니다.
+- 옵션 텍스트와 점수를 포함하며, 조건부 다음 질문의 ID를 가질 수 있습니다.
+
+### 3️⃣ `Question` 엔터티
+
+- 설문(`Survey`)과 연결되며, 각 질문은 설문 ID를 포함합니다.
+- 질문 텍스트, 질문 유형, 이전 및 다음 질문의 ID를 포함합니다.
+- 옵션(`Option`)과 답변(`Answer`)과의 일대다 관계를 가집니다.
+
+### 4️⃣ `Response` 엔터티
+
+- 설문(`Survey`)과 연결되며, 각 응답은 설문 ID와 이메일을 포함합니다.
+- 완료 날짜와 총 점수를 기록합니다.
+- 여러 답변(`Answer`)을 포함할 수 있습니다.
+
+### 5️⃣ `Survey` 엔터티
+
+- 설문 제목과 설명을 포함합니다.
+- 생성 날짜를 기록합니다.
+- 여러 질문(`Question`)과 응답(`Response`)을 포함할 수 있습니다.
+
+🔍 **이러한 설계의 핵심 포인트**:
+
+- **효율적인 데이터 관리**: 각 엔터티는 서로 연결되어 있어, 데이터의 일관성과 관리가 용이합니다.
+- **강력한 관계 설정**: `ManyToOne`과 `OneToMany` 관계를 통해 복잡한 데이터 구조를 명확하게 표현합니다.
+- **유연한 데이터 모델링**: 조건부 질문(`conditionalQuestion`)과 같은 유연한 구조를 통해 다양한 시나리오를 지원합니다.
+- **정규화된 데이터 구조**: 중복을 최소화하고 데이터 무결성을 유지하도록 설계되었습니다.
+- **확장 가능성**: 새로운 필드나 관계를 쉽게 추가할 수 있어, 시스템의 확장성을 보장합니다.
+
+### 📁 폴더 구조:
+
+```
+project-root
+│
+├── src
+│   ├── answer - 답변 관련 모듈, 서비스, 리졸버, 엔터티 및 타입
+│   ├── common - 공통 설정 및 필터
+│   ├── option - 옵션 관련 모듈, 서비스, 리졸버, 엔터티 및 타입
+│   ├── question - 질문 관련 모듈, 서비스, 리졸버, 엔터티 및 타입
+│   ├── response - 응답 관련 모듈, 서비스, 리졸버, 엔터티 및 타입
+│   └── survey - 설문 관련 모듈, 서비스, 리졸버, 엔터티 및 타입
+├── 기타 설정 및 메타데이터 파일들
 ```
 
-## 처음 로컬 환경에서 도커 시작
+## 🏁 마무리와 배운 점
 
-```bash
-# 빌드 후 시작
-docker compose up --build
-```
-
-## 앱 시작
-
-```bash
-# 로컬 환경 시작
-$ docker compose up
-
-# 백그라운드 환경에서 시작
-docker compose up -d
-```
-
-```
-# 설문지 시스템 API 구현
-
-## 설문지 CRUD (Survey)
-
-- **Create**: 새로운 설문지 생성
-  - `POST /surveys`
-- **Read**: 설문지 목록 조회 및 개별 설문지 조회
-  - `GET /surveys`, `GET /surveys/{id}`
-- **Update**: 설문지 정보 업데이트
-  - `PUT /surveys/{id}`
-- **Delete**: 설문지 삭제
-  - `DELETE /surveys/{id}`
-
-## 문항 CRUD (Question)
-
-- **Create**: 특정 설문지에 문항 추가
-  - `POST /surveys/{surveyId}/questions`
-- **Read**: 특정 설문지의 문항 조회
-  - `GET /surveys/{surveyId}/questions`
-- **Update**: 문항 수정
-  - `PUT /questions/{id}`
-- **Delete**: 문항 삭제
-  - `DELETE /questions/{id}`
-
-## 선택지 CRUD (Option)
-
-- **Create**: 특정 문항에 선택지 추가
-  - `POST /questions/{questionId}/options`
-- **Read**: 특정 문항의 선택지 조회
-  - `GET /questions/{questionId}/options`
-- **Update**: 선택지 수정
-  - `PUT /options/{id}`
-- **Delete**: 선택지 삭제
-  - `DELETE /options/{id}`
-
-## 답변 CRUD (Answer)
-
-- **Create**: 사용자의 답변 추가
-  - `POST /answers`
-- **Read**: 특정 답변 조회
-  - `GET /answers/{id}`
-- **Update**: 답변 수정
-  - `PUT /answers/{id}`
-- **Delete**: 답변 삭제
-  - `DELETE /answers/{id}`
-
-## 설문지 완료 (Response)
-
-- 사용자가 설문지를 완료하면, 해당 응답을 `Response` Entity에 저장
-  - `POST /surveys/{surveyId}/responses`
-
-## 완료된 설문지 확인
-
-- 특정 사용자가 완료한 설문지 목록 조회
-  - `GET /users/{userId}/responses`
-- 특정 설문지에 대한 모든 응답 조회
-  - `GET /surveys/{surveyId}/responses`
-``
-```

@@ -16,7 +16,6 @@ import { Response } from './response/entity/response.entity';
 import { Survey } from './survey/entity/survey.entity';
 import { QuestionModule } from './question/question.module';
 import { SurveyModule } from './survey/survey.module';
-import { DataSource } from 'typeorm';
 import { ResponseModule } from './response/response.module';
 import { AnswerModule } from './answer/answer.module';
 

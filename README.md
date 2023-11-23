@@ -92,7 +92,7 @@ project-root
 ├── 기타 설정 및 메타데이터 파일들
 ```
 
-## 🏁 GraphQL, 쿼리문 생성하기 예제
+## 🏁 GraphQL, 쿼리문 생성하기 예제 1
 
 ```js
 # 한 번에 Survey를 생성할때, Question과 Option도 동시에 생성할 수 있습니다.
@@ -464,7 +464,7 @@ mutation CreateNewSurvey {
   }
 }
 ```
-
+## 🏁 GraphQL, 쿼리문 생성하기 예제 2
 
 ```js
 # Response를 생성할 때 email을 기준으로 Unique로 관리됩니다. Answer를 같이 생성할 수 있으며,

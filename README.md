@@ -25,7 +25,7 @@ npm start
 
 ## 📘 API Documentation
 
-- 👉 [GraphQL PlayGround](https://travel-hunt.onrender.com/graphql/)
+- 👉 [GraphQL PlayGround](https://port-0-travel-hunt-kvmh2mljz6ccl7.sel4.cloudtype.app/graphql)
 
 - 🚀 배포 주의사항 (클릭 후 대기 시간이 있습니다.)
 

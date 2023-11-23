@@ -1,0 +1,145 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Answer {
+  SurveyId: ID!
+  id: ID!
+  questionId: ID!
+  selectedOptionId: Int!
+}
+
+input CreateAnswerInput {
+  questionId: Int!
+  responseId: Int
+  selectedOptionId: Int!
+}
+
+input CreateOptionInput {
+  conditionalNextQuestionId: Int
+  optionText: String!
+  score: Int!
+}
+
+input CreateQuestionInput {
+  nextQuestionId: ID
+  options: [CreateOptionInput!]
+  previousQuestionId: ID
+  questionText: String!
+  questionType: String!
+  surveyId: ID
+}
+
+input CreateResponseInput {
+  answers: [CreateAnswerInput!]!
+  email: String!
+  surveyId: ID
+}
+
+input CreateSurveyInput {
+  description: String!
+  questions: [CreateQuestionInput!]
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createAnswer(createAnswerInput: CreateAnswerInput!): Answer!
+  createOption(createOptionInput: CreateOptionInput!, questionId: ID!): Option!
+  createQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
+  createResponse(createResponseInput: CreateResponseInput!): Response!
+  createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
+  deleteOption(id: ID!): Boolean!
+  deleteQuestion(id: Int!): Boolean!
+  deleteResponse(id: Int!): Boolean!
+  deleteSurvey(id: Int!): Boolean!
+  rearrangeQuestions(updateInputs: [UpdateQuestionInput!]!): [Question!]!
+  removeAnswer(id: ID!): Boolean!
+  updateAnswer(id: ID!, updateAnswerInput: UpdateAnswerInput!): Answer!
+  updateOption(updateOptionInput: UpdateOptionInput!): Option!
+  updateQuestion(updateQuestionInput: UpdateQuestionInput!): Question!
+  updateSurvey(updateSurveyInput: UpdateSurveyInput!): Survey!
+}
+
+type Option {
+  conditionalNextQuestionId: Int
+  id: ID!
+  optionText: String!
+  questionId: ID!
+  score: Int!
+}
+
+type Query {
+  Response(id: Int!): Response
+  answer(id: ID!): Answer
+  option(id: ID!): Option
+  question(id: Int!): Question
+  survey(id: Int!): Survey
+}
+
+type Question {
+  answers: [Answer!]!
+  id: ID!
+  nextQuestionId: Int
+  options: [Option!]!
+  questionText: String!
+  questionType: String!
+  surveyId: ID!
+}
+
+type Response {
+  answers: [Answer!]!
+  completionDate: DateTime!
+  email: String!
+  id: ID!
+  surveyId: ID!
+  totalScore: Int!
+}
+
+type Survey {
+  creationDate: DateTime!
+  description: String!
+  id: ID!
+  questions: [Question!]!
+  responses: [Response!]!
+  title: String!
+}
+
+input UpdateAnswerInput {
+  questionId: Int
+  responseId: Int
+  selectedOptionId: Int
+}
+
+input UpdateOptionInput {
+  conditionalNextQuestionId: Int
+  id: ID!
+  optionText: String
+  questionId: ID
+  score: Int
+}
+
+input UpdateQuestionInput {
+  deleteOptionIds: [ID]
+  id: ID!
+  isDeleted: Boolean
+  newOptions: [CreateOptionInput]
+  nextQuestionId: ID
+  options: [CreateOptionInput]
+  previousQuestionId: ID
+  questionText: String
+  questionType: String
+  surveyId: ID
+}
+
+input UpdateSurveyInput {
+  deleteQuestionIds: [ID]
+  description: String
+  id: ID!
+  questions: [UpdateQuestionInput]
+  title: String
+}

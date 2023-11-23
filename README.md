@@ -48,3 +48,64 @@ $ docker compose up
 # 백그라운드 환경에서 시작
 docker compose up -d
 ```
+
+```
+# 설문지 시스템 API 구현
+
+## 설문지 CRUD (Survey)
+
+- **Create**: 새로운 설문지 생성
+  - `POST /surveys`
+- **Read**: 설문지 목록 조회 및 개별 설문지 조회
+  - `GET /surveys`, `GET /surveys/{id}`
+- **Update**: 설문지 정보 업데이트
+  - `PUT /surveys/{id}`
+- **Delete**: 설문지 삭제
+  - `DELETE /surveys/{id}`
+
+## 문항 CRUD (Question)
+
+- **Create**: 특정 설문지에 문항 추가
+  - `POST /surveys/{surveyId}/questions`
+- **Read**: 특정 설문지의 문항 조회
+  - `GET /surveys/{surveyId}/questions`
+- **Update**: 문항 수정
+  - `PUT /questions/{id}`
+- **Delete**: 문항 삭제
+  - `DELETE /questions/{id}`
+
+## 선택지 CRUD (Option)
+
+- **Create**: 특정 문항에 선택지 추가
+  - `POST /questions/{questionId}/options`
+- **Read**: 특정 문항의 선택지 조회
+  - `GET /questions/{questionId}/options`
+- **Update**: 선택지 수정
+  - `PUT /options/{id}`
+- **Delete**: 선택지 삭제
+  - `DELETE /options/{id}`
+
+## 답변 CRUD (Answer)
+
+- **Create**: 사용자의 답변 추가
+  - `POST /answers`
+- **Read**: 특정 답변 조회
+  - `GET /answers/{id}`
+- **Update**: 답변 수정
+  - `PUT /answers/{id}`
+- **Delete**: 답변 삭제
+  - `DELETE /answers/{id}`
+
+## 설문지 완료 (Response)
+
+- 사용자가 설문지를 완료하면, 해당 응답을 `Response` Entity에 저장
+  - `POST /surveys/{surveyId}/responses`
+
+## 완료된 설문지 확인
+
+- 특정 사용자가 완료한 설문지 목록 조회
+  - `GET /users/{userId}/responses`
+- 특정 설문지에 대한 모든 응답 조회
+  - `GET /surveys/{surveyId}/responses`
+``
+```

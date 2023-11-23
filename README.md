@@ -1,5 +1,28 @@
 # 🚀 Travel Hunt 개발 과정 🚀
 
+## 앱 시작
+
+```bash
+# 로컬 환경 시작
+
+# 의존성을 설치합니다.
+npm install
+
+# .env example을 참고하여, .env를 생성하고 환경변수를 설정합니다.
+NODE_ENV= #local
+PORT= #4000
+
+# NestJS - DB configs
+DATABASE_NAME= # Database Name
+DATABASE_USER= # Database User
+DATABASE_PASS= # Database Password
+DATABASE_HOST= # YOUR_DATABASE_URI
+
+# nestJS를 실행합니다.
+npm start
+
+```
+
 ## 📘 API Documentation
 
 - 👉 [GraphQL PlayGround](https://travel-hunt.onrender.com/graphql/)

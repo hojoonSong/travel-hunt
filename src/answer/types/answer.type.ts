@@ -6,7 +6,7 @@ export class AnswerType {
   id: number;
 
   @Field(() => ID)
-  SurveyId: number;
+  responseId: number;
 
   @Field(() => ID)
   questionId: number;

@@ -46,7 +46,7 @@ import { AnswerModule } from './answer/answer.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASS,
       database: process.env.DATABASE_NAME,
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       entities: [Option, Answer, Question, Response, Survey],
       logging: process.env.NODE_ENV !== 'production',
     }),

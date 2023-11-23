@@ -129,11 +129,24 @@ export class QuestionRepository {
       // 삭제할 질문과 관련 데이터 가져오기
       const questionToDelete = await queryRunner.manager.findOne(Question, {
         where: { id },
-        relations: ['nextQuestion'],
+        relations: ['options', 'answers'],
       });
 
       if (!questionToDelete) {
         throw new Error('Question not found');
+      }
+
+      if (questionToDelete.options) {
+        for (const option of questionToDelete.options) {
+          await queryRunner.manager.remove(option);
+        }
+      }
+
+      // Answer 객체 삭제
+      if (questionToDelete.answers) {
+        for (const answer of questionToDelete.answers) {
+          await queryRunner.manager.remove(answer);
+        }
       }
 
       // 이전 질문 찾기

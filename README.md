@@ -14,8 +14,7 @@
 - ![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
 
 ## 🗺️ ERD
-
-![ERD Diagram](erd.png)
+![ERD Diagram](https://github.com/hojoonSong/travel-hunt/assets/51044545/e422ceac-9280-4491-b902-a7421b1d5c03)
 
 ## 🛠️ 데이터 모델 설계
 

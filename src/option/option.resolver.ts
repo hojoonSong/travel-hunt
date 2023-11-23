@@ -14,7 +14,11 @@ export class OptionResolver {
     @Args('questionId', { type: () => ID }) questionId: number,
     @Args('createOptionInput') createOptionInput: CreateOptionInput,
   ) {
-    return this.optionService.createOption(createOptionInput, questionId);
+    try {
+      return this.optionService.createOption(createOptionInput, questionId);
+    } catch (error) {
+      throw new Error(`Failed to create option: ${error.message}`);
+    }
   }
 
   @Mutation(() => OptionType)
@@ -22,21 +26,33 @@ export class OptionResolver {
     @Args('updateOptionInput') updateOptionInput: UpdateOptionInput,
   ): Promise<Option> {
     const { id, ...updateData } = updateOptionInput;
-    return this.optionService.updateOption(id, updateData);
+    try {
+      return this.optionService.updateOption(id, updateData);
+    } catch (error) {
+      throw new Error(`Failed to update option: ${error.message}`);
+    }
   }
 
   @Mutation(() => Boolean)
   async deleteOption(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
-    await this.optionService.deleteOption(id);
-    return true;
+    try {
+      await this.optionService.deleteOption(id);
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete option: ${error.message}`);
+    }
   }
 
   @Query(() => OptionType, { nullable: true })
   async option(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<Option | undefined> {
-    return this.optionService.getOption(id);
+    try {
+      return this.optionService.getOption(id);
+    } catch (error) {
+      throw new Error(`Failed to fetch option: ${error.message}`);
+    }
   }
 }

@@ -5,7 +5,7 @@ import { CreateQuestionInput } from './types/create-question.input';
 import { UpdateQuestionInput } from './types/update-question.input';
 import { QuestionType } from './types/question.type';
 
-@Resolver(() => Question)
+@Resolver('Question')
 export class QuestionResolver {
   constructor(private readonly questionService: QuestionService) {}
 
@@ -14,29 +14,45 @@ export class QuestionResolver {
     @Args('createQuestionInputs', { type: () => [CreateQuestionInput] })
     createQuestionInputs: CreateQuestionInput[],
   ): Promise<Question[]> {
-    return this.questionService.createQuestions(createQuestionInputs);
+    try {
+      return this.questionService.createQuestions(createQuestionInputs);
+    } catch (error) {
+      throw new Error(`Failed to create questions: ${error.message}`);
+    }
   }
 
   @Mutation(() => QuestionType)
   async updateQuestion(
     @Args('updateQuestionInput') updateQuestionInput: UpdateQuestionInput,
   ): Promise<Question> {
-    return this.questionService.updateQuestion(updateQuestionInput);
+    try {
+      return this.questionService.updateQuestion(updateQuestionInput);
+    } catch (error) {
+      throw new Error(`Failed to update question: ${error.message}`);
+    }
   }
 
   @Query(() => QuestionType, { nullable: true })
   async question(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Question | undefined> {
-    return this.questionService.getQuestion(id);
+    try {
+      return this.questionService.getQuestion(id);
+    } catch (error) {
+      throw new Error(`Failed to fetch question: ${error.message}`);
+    }
   }
 
   @Mutation(() => Boolean)
   async deleteQuestion(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
-    await this.questionService.deleteQuestion(id);
-    return true;
+    try {
+      await this.questionService.deleteQuestion(id);
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete question: ${error.message}`);
+    }
   }
 
   @Mutation(() => [QuestionType])
@@ -44,6 +60,10 @@ export class QuestionResolver {
     @Args('updateInputs', { type: () => [UpdateQuestionInput] })
     updateInputs: UpdateQuestionInput[],
   ): Promise<Question[]> {
-    return this.questionService.rearrangeQuestions(updateInputs);
+    try {
+      return this.questionService.rearrangeQuestions(updateInputs);
+    } catch (error) {
+      throw new Error(`Failed to rearrange questions: ${error.message}`);
+    }
   }
 }

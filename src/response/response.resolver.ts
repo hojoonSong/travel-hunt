@@ -12,21 +12,33 @@ export class ResponseResolver {
   async createResponse(
     @Args('createResponseInput') createResponseInput: CreateResponseInput,
   ): Promise<Response> {
-    return this.responseService.createResponse(createResponseInput);
+    try {
+      return this.responseService.createResponse(createResponseInput);
+    } catch (error) {
+      throw new Error(`Failed to create response: ${error.message}`);
+    }
   }
 
   @Query(() => ResponseType, { nullable: true })
   async Response(
     @Args('id', { type: () => Int }) responseId: number,
   ): Promise<ResponseType | undefined> {
-    return this.responseService.findResponseWithTotalScore(responseId);
+    try {
+      return this.responseService.findResponseWithTotalScore(responseId);
+    } catch (error) {
+      throw new Error(`Failed to fetch response: ${error.message}`);
+    }
   }
 
   @Mutation(() => Boolean)
   async deleteResponse(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
-    await this.responseService.deleteResponse(id);
-    return true;
+    try {
+      await this.responseService.deleteResponse(id);
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete response: ${error.message}`);
+    }
   }
 }

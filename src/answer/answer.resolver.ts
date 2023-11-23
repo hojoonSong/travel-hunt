@@ -13,29 +13,45 @@ export class AnswerResolver {
   async createAnswer(
     @Args('createAnswerInput') createAnswerInput: CreateAnswerInput,
   ) {
-    return this.answerService.createAnswer(createAnswerInput);
-  } 
+    try {
+      return this.answerService.createAnswer(createAnswerInput);
+    } catch (error) {
+      throw new Error(`Failed to create answer: ${error.message}`);
+    }
+  }
 
   @Mutation(() => AnswerType)
   async updateAnswer(
     @Args('id', { type: () => ID }) id: number,
     @Args('updateAnswerInput') updateAnswerInput: UpdateAnswerInput,
   ): Promise<Answer> {
-    return this.answerService.updateAnswer(id, updateAnswerInput);
+    try {
+      return this.answerService.updateAnswer(id, updateAnswerInput);
+    } catch (error) {
+      throw new Error(`Failed to update answer: ${error.message}`);
+    }
   }
 
   @Mutation(() => Boolean)
   async removeAnswer(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<boolean> {
-    await this.answerService.deleteAnswer(id);
-    return true;
+    try {
+      await this.answerService.deleteAnswer(id);
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to remove answer: ${error.message}`);
+    }
   }
 
   @Query(() => AnswerType, { nullable: true })
   async answer(
     @Args('id', { type: () => ID }) id: number,
   ): Promise<Answer | undefined> {
-    return this.answerService.getAnswer(id);
+    try {
+      return this.answerService.getAnswer(id);
+    } catch (error) {
+      throw new Error(`Failed to fetch answer: ${error.message}`);
+    }
   }
 }

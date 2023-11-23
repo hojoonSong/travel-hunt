@@ -3,7 +3,7 @@ import { IsString, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
-  ALLOWED_ORIGINS: string;
+  PORT: string;
 
   @IsString()
   DATABASE_NAME: string;

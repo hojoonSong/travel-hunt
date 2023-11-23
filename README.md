@@ -26,9 +26,10 @@ npm start
 ## 📘 API Documentation
 
 - 👉 [GraphQL PlayGround API 문서 확인](https://port-0-travel-hunt-kvmh2mljz6ccl7.sel4.cloudtype.app/graphql)
-- 👉 [GraphQL PlayGround 쿼리 실행 가능](https://travel-hunt.onrender.com/graphql)
+- 👉 [GraphQL PlayGround 쿼리 실행 시 결과 반환 가능](https://travel-hunt.onrender.com/graphql)
 
 - 🚀 배포 주의사항 (쿼리 실행 가능한 배포서버는 클릭 후 대기 시간이 있습니다.)
+- PaaS 사용으로 배포환경에서 Playground 사용에 제약
 
 ## 📚 기술 스택
 

@@ -1,17 +1,15 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
-import { QuestionType } from '../../question/types/question.type';
-import { ResponseType } from '../../response/types/response.type';
 
 @ObjectType('Answer')
 export class AnswerType {
   @Field(() => ID)
   id: number;
 
-  @Field(() => ResponseType)
-  response: ResponseType;
+  @Field(() => ID)
+  SurveyId: number;
 
-  @Field(() => QuestionType)
-  question: QuestionType;
+  @Field(() => ID)
+  questionId: number;
 
   @Field(() => Int)
   selectedOptionId: number;

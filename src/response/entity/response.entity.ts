@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   CreateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -14,8 +15,12 @@ export class Response {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Survey, (survey) => survey.responses)
+  @ManyToOne(() => Survey, (survey) => survey.questions)
+  @JoinColumn({ name: 'surveyId' })
   survey: Survey;
+
+  @Column()
+  surveyId: number;
 
   @Column({ unique: true })
   email: string;
@@ -23,6 +28,11 @@ export class Response {
   @CreateDateColumn({ type: 'timestamp' })
   completionDate: Date;
 
-  @OneToMany(() => Answer, (answer) => answer.response)
+  @OneToMany(() => Answer, (answer) => answer.responseId, {
+    cascade: ['remove'],
+  })
   answers: Answer[];
+
+  @Column({ default: 0 })
+  totalScore: number;
 }

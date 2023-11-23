@@ -12,11 +12,12 @@ export class Option {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ManyToOne(() => Question, (question) => question.options)
+  @JoinColumn({ name: 'questionId' })
+  question: Question;
+
   @Column()
   questionId: number;
-
-  @ManyToOne(() => Question, (question) => question.options)
-  question: Question;
 
   @Column()
   optionText: string;
@@ -24,7 +25,10 @@ export class Option {
   @Column()
   score: number;
 
-  @ManyToOne(() => Question, (question) => question.options)
+  @ManyToOne(() => Question, (question) => question.options, { nullable: true })
   @JoinColumn({ name: 'conditionalNextQuestionId' })
-  conditionalNextQuestion: Question | null;
+  conditionalQuestion: Question | null;
+
+  @Column({ nullable: true })
+  conditionalNextQuestionId: number | null;
 }

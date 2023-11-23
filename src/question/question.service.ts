@@ -12,18 +12,12 @@ export class QuestionService {
     private optionService: OptionService,
   ) {}
 
-  async createQuestion(
-    createQuestionInput: CreateQuestionInput,
-  ): Promise<Question> {
-    const question = await this.questionRepository.create(createQuestionInput);
-    const savedQuestion = await this.questionRepository.save(question);
-
-    if (createQuestionInput.options && createQuestionInput.options.length > 0) {
-      for (const optionInput of createQuestionInput.options) {
-        await this.optionService.createOption(optionInput, savedQuestion.id);
-      }
-    }
-    return this.questionRepository.findOne(savedQuestion.id, ['options']);
+  async createQuestions(
+    createQuestionInputs: CreateQuestionInput[],
+  ): Promise<Question[]> {
+    return this.questionRepository.createQuestionsWithOptions(
+      createQuestionInputs,
+    );
   }
 
   async updateQuestion(
@@ -49,23 +43,15 @@ export class QuestionService {
     }
 
     // 업데이트된 질문 반환
-    return this.questionRepository.findOne(updateQuestionInput.id);
+    return this.questionRepository.findOne(updateQuestionInput.id, ['options']);
   }
 
   async getQuestion(id: number): Promise<Question | undefined> {
-    return this.questionRepository.findOne(id);
+    return this.questionRepository.findOne(id, ['options']);
   }
 
   async deleteQuestion(id: number): Promise<void> {
     return this.questionRepository.delete(id);
-  }
-
-  async createBulkQuestions(
-    createQuestionInputs: CreateQuestionInput[],
-  ): Promise<Question[]> {
-    return this.questionRepository.createQuestionsWithOptions(
-      createQuestionInputs,
-    );
   }
 
   async rearrangeQuestions(

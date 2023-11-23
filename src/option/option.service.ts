@@ -20,7 +20,7 @@ export class OptionService {
     updateData: Partial<UpdateOptionInput>,
   ): Promise<Option> {
     await this.optionRepository.update(id, updateData);
-    return this.optionRepository.findOne(id);
+    return this.optionRepository.findOne(id, ['question']);
   }
 
   async deleteOption(id: number): Promise<void> {
@@ -28,6 +28,6 @@ export class OptionService {
   }
 
   async getOption(id: number): Promise<Option | undefined> {
-    return this.optionRepository.findOne(id);
+    return this.optionRepository.findOne(id, ['question']);
   }
 }

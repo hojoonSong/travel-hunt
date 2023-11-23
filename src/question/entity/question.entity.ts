@@ -8,6 +8,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
+import { Answer } from 'src/answer/entity/answer.entity';
 
 @Entity()
 export class Question {
@@ -16,6 +17,9 @@ export class Question {
 
   @ManyToOne(() => Survey, (survey) => survey.questions)
   @JoinColumn({ name: 'surveyId' })
+  survey: Survey;
+
+  @Column()
   surveyId: number;
 
   @Column()
@@ -30,6 +34,13 @@ export class Question {
   @Column({ nullable: true })
   nextQuestionId: number | null;
 
-  @OneToMany(() => Option, (option) => option.question, { cascade: ['remove'] })
+  @OneToMany(() => Option, (option) => option.questionId, {
+    cascade: ['remove'],
+  })
   options: Option[];
+
+  @OneToMany(() => Answer, (option) => option.questionId, {
+    cascade: ['remove'],
+  })
+  answers: Answer[];
 }

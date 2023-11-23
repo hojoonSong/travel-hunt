@@ -34,7 +34,10 @@ export class SurveyService {
   }
 
   async getSurvey(id: number): Promise<Survey | undefined> {
-    return this.surveyRepository.findOne(id);
+    return this.surveyRepository.findOne(id, [
+      'questions',
+      'questions.options',
+    ]);
   }
 
   async updateSurvey(updateSurveyInput: UpdateSurveyInput): Promise<Survey> {
@@ -55,7 +58,10 @@ export class SurveyService {
       }
     }
 
-    return this.surveyRepository.findOne(id);
+    return this.surveyRepository.findOne(id, [
+      'questions',
+      'questions.options',
+    ]);
   }
 
   async deleteSurvey(id: number): Promise<void> {

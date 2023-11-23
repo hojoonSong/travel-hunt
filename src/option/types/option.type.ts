@@ -5,7 +5,7 @@ export class OptionType {
   @Field(() => ID)
   id: number;
 
-  @Field(() => Int)
+  @Field(() => ID)
   questionId: number;
 
   @Field()

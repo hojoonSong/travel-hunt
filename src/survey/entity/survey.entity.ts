@@ -27,7 +27,7 @@ export class Survey {
   })
   questions: Question[];
 
-  @OneToMany(() => Response, (response) => response.survey, {
+  @OneToMany(() => Response, (response) => response.surveyId, {
     cascade: ['remove'],
   })
   responses: Response[];

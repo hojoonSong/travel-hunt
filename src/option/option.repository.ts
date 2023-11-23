@@ -16,10 +16,13 @@ export class OptionRepository {
     return this.repository.save(option);
   }
 
-  async findOne(id: number): Promise<Option | undefined> {
-    return this.repository.findOne({
-      where: { id },
-    });
+  async findOne(id: number, relations?: string[]): Promise<Option | undefined> {
+    const findOptions = { where: { id } };
+
+    if (relations && relations.length > 0) {
+      findOptions['relations'] = relations;
+    }
+    return this.repository.findOne(findOptions);
   }
 
   async create(

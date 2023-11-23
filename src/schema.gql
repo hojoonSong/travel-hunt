@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Answer {
+  SurveyId: ID!
   id: ID!
-  question: Question!
-  response: Response!
+  questionId: ID!
   selectedOptionId: Int!
 }
 
@@ -71,7 +71,7 @@ type Option {
   conditionalNextQuestionId: Int
   id: ID!
   optionText: String!
-  questionId: Int!
+  questionId: ID!
   score: Int!
 }
 
@@ -84,6 +84,7 @@ type Query {
 }
 
 type Question {
+  answers: [Answer!]!
   id: ID!
   nextQuestionId: Int
   options: [Option!]!
@@ -97,7 +98,7 @@ type Response {
   completionDate: DateTime!
   email: String!
   id: ID!
-  survey: Survey!
+  surveyId: ID!
 }
 
 type Survey {

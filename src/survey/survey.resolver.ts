@@ -9,28 +9,28 @@ import { SurveyType } from './types/survey.type';
 export class SurveyResolver {
   constructor(private readonly surveyService: SurveyService) {}
 
-  @Mutation((returns) => SurveyType)
+  @Mutation(() => SurveyType)
   async createSurvey(
     @Args('createSurveyInput') createSurveyInput: CreateSurveyInput,
   ): Promise<Survey> {
     return this.surveyService.createSurvey(createSurveyInput);
   }
 
-  @Mutation((returns) => SurveyType)
+  @Mutation(() => SurveyType)
   async updateSurvey(
     @Args('updateSurveyInput') updateSurveyInput: UpdateSurveyInput,
   ): Promise<Survey> {
     return this.surveyService.updateSurvey(updateSurveyInput);
   }
 
-  @Query((returns) => SurveyType, { nullable: true })
+  @Query(() => SurveyType, { nullable: true })
   async survey(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Survey | undefined> {
     return this.surveyService.getSurvey(id);
   }
 
-  @Mutation((returns) => Boolean)
+  @Mutation(() => Boolean)
   async deleteSurvey(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {

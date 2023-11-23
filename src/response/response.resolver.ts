@@ -5,18 +5,18 @@ import { CreateResponseInput } from './types/create-response.type';
 import { UpdateResponseInput } from './types/update-response.type';
 import { Response } from './entity/response.entity';
 
-@Resolver((of) => Response)
+@Resolver(() => Response)
 export class ResponseResolver {
   constructor(private readonly responseService: ResponseService) {}
 
-  @Mutation((returns) => ResponseType)
-  async createResolver(
+  @Mutation(() => ResponseType)
+  async createResponse(
     @Args('createResponseInput') createResponseInput: CreateResponseInput,
   ): Promise<Response> {
     return this.responseService.createResponse(createResponseInput);
   }
 
-  @Mutation((returns) => ResponseType)
+  @Mutation(() => ResponseType)
   async updateResponse(
     @Args('id', { type: () => Int }) id: number,
     @Args('updateResponseInput') updateResponseInput: UpdateResponseInput,
@@ -24,14 +24,14 @@ export class ResponseResolver {
     return this.responseService.updateResponse(id, updateResponseInput);
   }
 
-  @Query((returns) => ResponseType, { nullable: true })
+  @Query(() => ResponseType, { nullable: true })
   async response(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Response | undefined> {
     return this.responseService.getResponse(id);
   }
 
-  @Mutation((returns) => Boolean)
+  @Mutation(() => Boolean)
   async deleteResponse(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {

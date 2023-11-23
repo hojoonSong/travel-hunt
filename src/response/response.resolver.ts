@@ -1,9 +1,8 @@
+import { Response } from 'src/response/entity/response.entity';
 import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { ResponseService } from './response.service';
 import { ResponseType } from './types/response.type';
 import { CreateResponseInput } from './types/create-response.type';
-import { UpdateResponseInput } from './types/update-response.type';
-import { Response } from './entity/response.entity';
 
 @Resolver(() => Response)
 export class ResponseResolver {
@@ -16,19 +15,11 @@ export class ResponseResolver {
     return this.responseService.createResponse(createResponseInput);
   }
 
-  @Mutation(() => ResponseType)
-  async updateResponse(
-    @Args('id', { type: () => Int }) id: number,
-    @Args('updateResponseInput') updateResponseInput: UpdateResponseInput,
-  ): Promise<Response> {
-    return this.responseService.updateResponse(id, updateResponseInput);
-  }
-
   @Query(() => ResponseType, { nullable: true })
-  async response(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<Response | undefined> {
-    return this.responseService.getResponse(id);
+  async Response(
+    @Args('id', { type: () => Int }) responseId: number,
+  ): Promise<ResponseType | undefined> {
+    return this.responseService.findResponseWithTotalScore(responseId);
   }
 
   @Mutation(() => Boolean)

@@ -34,12 +34,12 @@ export class Question {
   @Column({ nullable: true })
   nextQuestionId: number | null;
 
-  @OneToMany(() => Option, (option) => option.questionId, {
+  @OneToMany(() => Option, (option) => option.question, {
     cascade: ['remove'],
   })
   options: Option[];
 
-  @OneToMany(() => Answer, (option) => option.questionId, {
+  @OneToMany(() => Answer, (option) => option.question, {
     cascade: ['remove'],
   })
   answers: Answer[];

@@ -15,8 +15,8 @@ export class Response {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Survey, (survey) => survey.questions)
-  @JoinColumn({ name: 'surveyId' })
+  @ManyToOne(() => Survey, (survey) => survey.responses)
+  @JoinColumn({ name: 'survey' })
   survey: Survey;
 
   @Column()
@@ -25,6 +25,9 @@ export class Response {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: 0 })
+  totalScore: number;
+
   @CreateDateColumn({ type: 'timestamp' })
   completionDate: Date;
 
@@ -32,7 +35,4 @@ export class Response {
     cascade: ['remove'],
   })
   answers: Answer[];
-
-  @Column({ default: 0 })
-  totalScore: number;
 }

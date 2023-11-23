@@ -16,10 +16,16 @@ export class ResponseRepository {
     return this.repository.save(response);
   }
 
-  async findOne(id: number): Promise<Response | undefined> {
-    return this.repository.findOne({
-      where: { id },
-    });
+  async findOne(
+    id: number,
+    relations?: string[],
+  ): Promise<Response | undefined> {
+    const findOptions = { where: { id } };
+
+    if (relations && relations.length > 0) {
+      findOptions['relations'] = relations;
+    }
+    return this.repository.findOne(findOptions);
   }
 
   async create(createResponseInput: CreateResponseInput): Promise<Response> {

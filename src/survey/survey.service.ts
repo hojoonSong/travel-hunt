@@ -24,7 +24,7 @@ export class SurveyService {
         }),
       );
 
-      await this.questionService.createBulkQuestions(questionsWithSurveyId);
+      await this.questionService.createQuestions(questionsWithSurveyId);
     }
 
     return this.surveyRepository.findOne(savedSurvey.id, [

@@ -15,6 +15,9 @@ export class ResponseType {
   @Field()
   completionDate: Date;
 
+  @Field(() => Int)
+  totalScore: number;
+
   @Field(() => [AnswerType])
   answers: AnswerType[];
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Option } from './entity/option.entity';
 import { UpdateOptionInput } from './types/update-option.input';
 import { CreateOptionInput } from './types/create-option.input';
@@ -48,5 +48,11 @@ export class OptionRepository {
 
   async delete(id: number): Promise<void> {
     await this.repository.delete(id);
+  }
+
+  async findOptionsByIds(ids: number[]): Promise<Option[]> {
+    return this.repository.find({
+      where: { id: In(ids) },
+    });
   }
 }

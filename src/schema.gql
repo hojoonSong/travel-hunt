@@ -49,10 +49,9 @@ scalar DateTime
 
 type Mutation {
   createAnswer(createAnswerInput: CreateAnswerInput!): Answer!
-  createBulkQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
   createOption(createOptionInput: CreateOptionInput!, questionId: ID!): Option!
-  createQuestion(createQuestionInput: CreateQuestionInput!): Question!
-  createResolver(createResponseInput: CreateResponseInput!): Response!
+  createQuestions(createQuestionInputs: [CreateQuestionInput!]!): [Question!]!
+  createResponse(createResponseInput: CreateResponseInput!): Response!
   createSurvey(createSurveyInput: CreateSurveyInput!): Survey!
   deleteOption(id: ID!): Boolean!
   deleteQuestion(id: Int!): Boolean!
@@ -63,7 +62,6 @@ type Mutation {
   updateAnswer(id: ID!, updateAnswerInput: UpdateAnswerInput!): Answer!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
   updateQuestion(updateQuestionInput: UpdateQuestionInput!): Question!
-  updateResponse(id: Int!, updateResponseInput: UpdateResponseInput!): Response!
   updateSurvey(updateSurveyInput: UpdateSurveyInput!): Survey!
 }
 
@@ -76,10 +74,10 @@ type Option {
 }
 
 type Query {
+  Response(id: Int!): Response
   answer(id: ID!): Answer
   option(id: ID!): Option
   question(id: Int!): Question
-  response(id: Int!): Response
   survey(id: Int!): Survey
 }
 
@@ -99,6 +97,7 @@ type Response {
   email: String!
   id: ID!
   surveyId: ID!
+  totalScore: Int!
 }
 
 type Survey {
@@ -135,11 +134,6 @@ input UpdateQuestionInput {
   questionText: String
   questionType: String
   surveyId: ID
-}
-
-input UpdateResponseInput {
-  answers: [UpdateAnswerInput!]
-  email: String
 }
 
 input UpdateSurveyInput {

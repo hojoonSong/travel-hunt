@@ -33,6 +33,6 @@ async function bootstrap(): Promise<void> {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   SwaggerModule.setup('api-docs', app, document);
-  await app.listen(process.env.PORT);
+  await app.listen(4000);
 }
 bootstrap();
